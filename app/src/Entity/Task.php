@@ -65,6 +65,12 @@ class Task
     private $title;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tasks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+    /**
      * Getter for Id.
      *
      * @return int|null Id
@@ -132,5 +138,24 @@ class Task
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return Category|null
+     */
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category|null $category
+     * @return Task
+     */
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 }
