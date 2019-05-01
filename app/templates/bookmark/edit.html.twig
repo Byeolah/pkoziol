@@ -1,0 +1,9 @@
+{% include 'default/_form.html.twig' with {
+    page_title: 'title.bookmark_edit',
+    page_title_param: {'%id%': bookmark.id},
+    attr: {
+        method: 'PUT',
+        action: url('bookmark_edit', {'id': bookmark.id}),
+    },
+    back_to_list_path: 'bookmark_index',
+} %}

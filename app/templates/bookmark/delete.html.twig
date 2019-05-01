@@ -1,0 +1,9 @@
+{% include 'default/_form.html.twig' with {
+    page_title: 'title.bookmark_delete',
+    page_title_param: {'%id%': bookmark.id},
+    attr: {
+        method: 'DELETE',
+        action: url('bookmark_delete', {'id': bookmark.id}),
+    },
+    back_to_list_path: 'bookmark_index',
+} %}

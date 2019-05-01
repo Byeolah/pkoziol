@@ -46,6 +46,59 @@
                 <source>title.login</source>
                 <target>Strona logowania</target>
             </trans-unit>
+            <trans-unit id="title.contact_list">
+                <source>title.contact_list</source>
+                <target>Kontakty</target>
+            </trans-unit>
+            <trans-unit id="title.contact_new">
+                <source>title.contact_new</source>
+                <target>Dodaj kontakt</target>
+            </trans-unit>
+            <trans-unit id="title.category_new">
+                <source>title.category_new</source>
+                <target>Dodaj kategorię</target>
+            </trans-unit>
+            <trans-unit id="title.contact_edit">
+                <source>title.contact_edit</source>
+                <target>Edytuj kontakt</target>
+            </trans-unit>
+            <trans-unit id="title.contact_delete">
+                <source>title.contact_delete</source>
+                <target>Usuń kontakt</target>
+            </trans-unit>
+            <trans-unit id="title.bookmark_list">
+                <source>title.bookmark_list</source>
+                <target>Zakładki</target>
+            </trans-unit>
+            <trans-unit id="title.bookmark_new">
+                <source>title.bookmark_new</source>
+                <target>Dodaj zakładkę</target>
+            </trans-unit>
+            <trans-unit id="title.bookmark_edit">
+                <source>title.bookmark_edit</source>
+                <target>Edytuj zakładkę</target>
+            </trans-unit>
+            <trans-unit id="title.bookmark_delete">
+                <source>title.bookmark_delete</source>
+                <target>Usuń zakładkę</target>
+            </trans-unit>
+            <trans-unit id="title.calendar_list">
+                <source>title.calendar_list</source>
+                <target>Kalendarz</target>
+            </trans-unit>
+            <trans-unit id="title.calendar_new">
+                <source>title.calendar_new</source>
+                <target>Dodaj wydarzenie</target>
+            </trans-unit>
+            <trans-unit id="title.calendar_edit">
+                <source>title.calendar_edit</source>
+                <target>Edytuj wydarzenie</target>
+            </trans-unit>
+            <trans-unit id="title.calendar_delete">
+                <source>title.calendar_delete</source>
+                <target>Usuń wydarzenie</target>
+            </trans-unit>
+
             <trans-unit id="label.category">
                 <source>label.category</source>
                 <target>Kategoria</target>
@@ -62,6 +115,31 @@
                 <source>label.password</source>
                 <target>Hasło</target>
             </trans-unit>
+            <trans-unit id="label.name">
+                <source>label.name</source>
+                <target>Imię</target>
+            </trans-unit>
+            <trans-unit id="label.surname">
+                <source>label.surname</source>
+                <target>Nazwisko</target>
+            </trans-unit>
+            <trans-unit id="label.phone">
+                <source>label.phone</source>
+                <target>Numer telefonu</target>
+            </trans-unit>
+            <trans-unit id="label.url">
+                <source>label.url</source>
+                <target>Adres URL</target>
+            </trans-unit>
+            <trans-unit id="label.date">
+                <source>label.date</source>
+                <target>Data</target>
+            </trans-unit>
+            <trans-unit id="label.event">
+                <source>label.event</source>
+                <target>Wydarzenie</target>
+            </trans-unit>
+
             <trans-unit id="action.save">
                 <source>action.save</source>
                 <target>Zapisz</target>
@@ -86,18 +164,16 @@
                 <source>action.delete</source>
                 <target>Usuń</target>
             </trans-unit>
-            <trans-unit id="title.category_new">
-                <source>title.category_new</source>
-                <target>Dodaj kategorię</target>
-            </trans-unit>
-            <trans-unit id="category.task_list">
-                <source>category.task_list</source>
-                <target>Lista kategorii</target>
-            </trans-unit>
             <trans-unit id="action.back_to_list">
                 <source>action.back_to_list</source>
                 <target>Powrót</target>
             </trans-unit>
+
+            <trans-unit id="category.task_list">
+                <source>category.task_list</source>
+                <target>Lista kategorii</target>
+            </trans-unit>
+
             <trans-unit id="message.created_successfully">
                 <source>message.created_successfully</source>
                 <target>Element został dodany.</target>
@@ -113,6 +189,10 @@
             <trans-unit id="message.deleted_successfully">
                 <source>message.deleted_successfully</source>
                 <target>Element został usunięty.</target>
+            </trans-unit>
+            <trans-unit id="message.empty_list">
+                <source>message.empty_list</source>
+                <target>Brak rekordów do wyświetlenia.</target>
             </trans-unit>
 
 

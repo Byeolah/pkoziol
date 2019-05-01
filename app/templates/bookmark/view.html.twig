@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.bookmark_list'|trans({'%id%': bookmark.id|default('')}) }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.bookmark_list'|trans({'%id%': bookmark.id|default('')}) }}</h1>
+    {% if bookmark is defined and bookmark|length %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label.id'|trans }}</dt>
+            <dd>{{ bookmark.id }}</dd>
+            <dt>{{ 'label.title'|trans }}</dt>
+            <dd>{{ bookmark.title }}</dd>
+            <dt>{{ 'label.url'|trans }}</dt>
+            <dd>{{ bookmark.url }}</dd>
+            <dt>{{ 'label.created_at'|trans }}</dt>
+            <dd>{{ bookmark.createdAt|localizeddate }}</dd>
+            <dt>{{ 'label.updated_at'|trans }}</dt>
+            <dd>{{ bookmark.updatedAt|localizeddate }}</dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

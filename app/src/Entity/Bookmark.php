@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Bookmark entity.
+ */
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -10,12 +12,12 @@ use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Contact.
+ * Class Bookmark.
  *
- * @ORM\Entity(repositoryClass="App\Repository\ContactRepository")
- * @ORM\Table(name="contacts")
+ * @ORM\Entity(repositoryClass="App\Repository\BookmarkRepository")
+ * @ORM\Table(name="bookmarks")
  */
-class Contact
+class Bookmark
 {
     /**
      * Use constants to define configuration options that rarely change instead
@@ -38,44 +40,28 @@ class Contact
     private $id;
 
     /**
-     * Name.
+     * Title.
      *
-     * @var string
-     *
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=45)
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="3",
-     *     max="50",
+     *     max="45",
      * )
      */
-    private $name;
+    private $title;
 
     /**
-     * Surname.
+     * Url.
      *
-     * @var string
-     *
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(
-     *     min="3",
-     *     max="40",
+     *     min="5",
+     *     max="255",
      * )
      */
-    private $surname;
-
-    /**
-     * Phone.
-     *
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank
-     * @Assert\Length(
-     *     min="3",
-     *     max="12",
-     * )
-     */
-    private $phone;
+    private $url;
 
     /**
      * Created at.
@@ -114,70 +100,47 @@ class Contact
     }
 
     /**
-     * Getter for Name.
+     * Getter for Title.
      *
      * @return string|null
      */
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * Setter for Name.
+     * Setter for Title.
      *
-     * @param string $name
-     * @return Contact
+     * @param string $title
+     * @return Bookmark
      */
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
     /**
-     * Getter for Surname.
+     * Getter for URL.
      *
      * @return string|null
      */
-    public function getSurname(): ?string
+    public function getUrl(): ?string
     {
-        return $this->surname;
+        return $this->url;
     }
 
     /**
-     * Setter for Surname.
+     * Setter for URL.
      *
-     * @param string $surname
-     * @return Contact
+     * @param string $url
+     * @return Bookmark
      */
-    public function setSurname(string $surname): self
+    public function setUrl(string $url): self
     {
-        $this->surname = $surname;
-
-        return $this;
-    }
-
-    /**
-     * Getter for Phone.
-     *
-     * @return int|null
-     */
-    public function getPhone(): ?int
-    {
-        return $this->phone;
-    }
-
-    /**
-     * Setter for Phone.
-     *
-     * @param int $phone
-     * @return Contact
-     */
-    public function setPhone(int $phone): self
-    {
-        $this->phone = $phone;
+        $this->url = $url;
 
         return $this;
     }

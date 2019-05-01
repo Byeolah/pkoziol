@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Calendar entity.
+ */
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -10,12 +13,12 @@ use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Contact.
+ * Class Calendar.
  *
- * @ORM\Entity(repositoryClass="App\Repository\ContactRepository")
- * @ORM\Table(name="contacts")
+ * @ORM\Entity(repositoryClass="App\Repository\CalendarRepository")
+ * @ORM\Table(name="calendars")
  */
-class Contact
+class Calendar
 {
     /**
      * Use constants to define configuration options that rarely change instead
@@ -31,51 +34,30 @@ class Contact
      *
      * @var int
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * Name.
+     * Date.
      *
-     * @var string
-     *
-     * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank
-     * @Assert\Length(
-     *     min="3",
-     *     max="50",
-     * )
+     * @ORM\Column(type="date")
      */
-    private $name;
+    private $date;
 
     /**
-     * Surname.
+     * Event.
      *
-     * @var string
-     *
-     * @ORM\Column(type="string", length=40)
+     * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="3",
-     *     max="40",
+     *     max="100",
      * )
      */
-    private $surname;
-
-    /**
-     * Phone.
-     *
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank
-     * @Assert\Length(
-     *     min="3",
-     *     max="12",
-     * )
-     */
-    private $phone;
+    private $event;
 
     /**
      * Created at.
@@ -114,70 +96,47 @@ class Contact
     }
 
     /**
-     * Getter for Name.
+     * Getter for Date.
      *
-     * @return string|null
+     * @return \DateTimeInterface|null
      */
-    public function getName(): ?string
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->name;
+        return $this->date;
     }
 
     /**
-     * Setter for Name.
+     * Setter for Date.
      *
-     * @param string $name
-     * @return Contact
+     * @param \DateTimeInterface $date
+     * @return Calendar
      */
-    public function setName(string $name): self
+    public function setDate(\DateTimeInterface $date): self
     {
-        $this->name = $name;
+        $this->date = $date;
 
         return $this;
     }
 
     /**
-     * Getter for Surname.
+     * Getter for event.
      *
      * @return string|null
      */
-    public function getSurname(): ?string
+    public function getEvent(): ?string
     {
-        return $this->surname;
+        return $this->event;
     }
 
     /**
-     * Setter for Surname.
+     * Setter for Event.
      *
-     * @param string $surname
-     * @return Contact
+     * @param string $event
+     * @return Calendar
      */
-    public function setSurname(string $surname): self
+    public function setEvent(string $event): self
     {
-        $this->surname = $surname;
-
-        return $this;
-    }
-
-    /**
-     * Getter for Phone.
-     *
-     * @return int|null
-     */
-    public function getPhone(): ?int
-    {
-        return $this->phone;
-    }
-
-    /**
-     * Setter for Phone.
-     *
-     * @param int $phone
-     * @return Contact
-     */
-    public function setPhone(int $phone): self
-    {
-        $this->phone = $phone;
+        $this->event = $event;
 
         return $this;
     }

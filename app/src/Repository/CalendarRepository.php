@@ -1,33 +1,26 @@
 <?php
 /**
- * Contact repository.
+ * Calendar repository.
  */
 
 namespace App\Repository;
 
-use App\Entity\Contact;
+use App\Entity\Calendar;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * ContactRepository class.
- *
- * @method Contact|null find($id, $lockMode = null, $lockVersion = null)
- * @method Contact|null findOneBy(array $criteria, array $orderBy = null)
- * @method Contact[]    findAll()
- * @method Contact[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Calendar|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Calendar|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Calendar[]    findAll()
+ * @method Calendar[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ContactRepository extends ServiceEntityRepository
+class CalendarRepository extends ServiceEntityRepository
 {
-    /**
-     * ContactRepository constructor.
-     *
-     * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry Registry
-     */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Contact::class);
+        parent::__construct($registry, Calendar::class);
     }
 
     /**
@@ -56,35 +49,36 @@ class ContactRepository extends ServiceEntityRepository
     /**
      * Save record.
      *
-     * @param \App\Entity\Contact $contact Contact entity
+     * @param \App\Entity\Calendar $calendar Calendar entity
      *
      * @return void
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(Contact $contact): void
+    public function save(Calendar $calendar): void
     {
-        $this->_em->persist($contact);
-        $this->_em->flush($contact);
+        $this->_em->persist($calendar);
+        $this->_em->flush($calendar);
     }
 
     /**
      * Delete record.
      *
-     * @param \App\Entity\Contact $contact Contact entity
+     * @param \App\Entity\Calendar $calendar Calendar entity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function delete(Contact $contact): void
+    public function delete(Calendar $calendar): void
     {
-        $this->_em->remove($contact);
-        $this->_em->flush($contact);
+        $this->_em->remove($calendar);
+        $this->_em->flush($calendar);
     }
 
+
     // /**
-    //  * @return Contact[] Returns an array of Contact objects
+    //  * @return Calendar[] Returns an array of Calendar objects
     //  */
     /*
     public function findByExampleField($value)
@@ -101,7 +95,7 @@ class ContactRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Contact
+    public function findOneBySomeField($value): ?Calendar
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

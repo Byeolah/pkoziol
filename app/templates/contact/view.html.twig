@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.contact_list'|trans({'%id%': contact.id|default('')}) }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.contact_list'|trans({'%id%': contact.id|default('')}) }}</h1>
+    {% if contact is defined and contact|length %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label.id'|trans }}</dt>
+            <dd>{{ contact.id }}</dd>
+            <dt>{{ 'label.name'|trans }}</dt>
+            <dd>{{ contact.name }}</dd>
+            <dt>{{ 'label.surname'|trans }}</dt>
+            <dd>{{ contact.surname }}</dd>
+            <dt>{{ 'label.phone'|trans }}</dt>
+            <dd>{{ contact.phone }}</dd>
+            <dt>{{ 'label.created_at'|trans }}</dt>
+            <dd>{{ contact.createdAt|localizeddate }}</dd>
+            <dt>{{ 'label.updated_at'|trans }}</dt>
+            <dd>{{ contact.updatedAt|localizeddate }}</dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

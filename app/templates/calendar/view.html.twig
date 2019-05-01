@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.calendar_list'|trans({'%id%': calendar.id|default('')}) }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.calendar_list'|trans({'%id%': calendar.id|default('')}) }}</h1>
+    {% if calendar is defined and calendar|length %}
+        <dl class="dl-horizontal">
+            <dt>{{ 'label.id'|trans }}</dt>
+            <dd>{{ calendar.id }}</dd>
+            <dt>{{ 'label.date'|trans }}</dt>
+            <dd>{{ calendar.date.date }}</dd>
+            <dt>{{ 'label.event'|trans }}</dt>
+            <dd>{{ calendar.event }}</dd>
+            <dt>{{ 'label.created_at'|trans }}</dt>
+            <dd>{{ calendar.createdAt|localizeddate }}</dd>
+            <dt>{{ 'label.updated_at'|trans }}</dt>
+            <dd>{{ calendar.updatedAt|localizeddate }}</dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

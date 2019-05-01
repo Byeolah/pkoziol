@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Task
 {
-
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.

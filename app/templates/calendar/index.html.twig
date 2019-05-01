@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.calendar_list'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.calendar_list'|trans }}</h1>
+    {% if pagination is defined and pagination|length %}
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 't.id') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.date'|trans, 't.date') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.event'|trans, 't.event') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 't.createdAt') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.updated_at'|trans, 't.updatedAt') }}</th>
+                <th>{{ 'label.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for calendar in pagination %}
+                <tr>
+                    <td>{{ calendar.id }}</td>
+                    <td>{{ calendar.date.date }}</td>
+                    <td>{{ calendar.event }}</td>
+                    <td>{{ calendar.createdAt|localizeddate }}</td>
+                    <td>{{ calendar.updatedAt|localizeddate }}</td>
+                    <td>
+                        <a href="{{ url('calendar_view', {id: calendar.id}) }}" title="{{ 'action.view'|trans }}">
+                            {{ 'action.view'|trans }}
+                        </a>
+                        <a href="{{ url('calendar_edit', {id: calendar.id}) }}" title="{{ 'action.edit'|trans }}">
+                            {{ 'action.edit'|trans }}
+                        </a>
+                        <a href="{{ url('calendar_delete', {id: calendar.id}) }}" title="{{ 'action.delete'|trans }}">
+                            {{ 'action.delete'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="card">
+        <a class="btn" href="{{ url('calendar_new') }}" title="{{ 'action.new'|trans }}">
+            {{ 'action.new'|trans }}
+        </a>
+        </div>
+
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+    {% else %}
+        <p>
+            {{ 'message.empty_list'|trans }}
+        </p>
+        <div class="card">
+            <a class="btn" href="{{ url('calendar_new') }}" title="{{ 'action.new'|trans }}">
+                {{ 'action.new'|trans }}
+            </a>
+        </div>
+    {% endif %}
+
+{% endblock %}
