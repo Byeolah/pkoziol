@@ -1,7 +1,4 @@
 <?php
-/**
- * Task entity.
- */
 
 namespace App\Entity;
 
@@ -13,12 +10,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Task class.
+ * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
  *
- * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
- * @ORM\Table(name="tasks")
+ * @ORM\Table(name="tag")
+ *
+ * @UniqueEntity(fields={"title"})
  */
-class Task
+class Tag
 {
 
     /**
@@ -29,13 +27,13 @@ class Task
      * @constant int NUMBER_OF_ITEMS
      */
     const NUMBER_OF_ITEMS = 10;
+
     /**
      * Primary key.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -73,7 +71,7 @@ class Task
      *
      * @ORM\Column(
      *     type="string",
-     *     length=255,
+     *     length=64
      * )
      *
      * @Assert\NotBlank
@@ -85,34 +83,36 @@ class Task
     private $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tasks")
-     * @ORM\JoinColumn(nullable=false)
+     * Code.
+     *
+     * @var string
+     *
+     * @ORM\Column(
+     *     type="string",
+     *     length=64
+     * )
+     *
+     * @Gedmo\Slug(fields={"title"})
+     *
+     * @Assert\Length(
+     *     min="3",
+     *     max="64",
+     * )
      */
-    private $category;
+    private $code;
 
     /**
-     * Tags.
-     *
-     * @var array
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="App\Entity\Tag",
-     *     inversedBy="tasks",
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinTable(name="tasks_tags")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Task", mappedBy="tags")
      */
-    private $tags;
+    private $tasks;
 
     public function __construct()
     {
-        $this->tags = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     /**
-     * Getter for Id.
-     *
-     * @return int|null Id
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -120,9 +120,7 @@ class Task
     }
 
     /**
-     * Getter for Created at.
-     *
-     * @return \DateTimeInterface|null Created at
+     * @return \DateTimeInterface|null
      */
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -130,19 +128,18 @@ class Task
     }
 
     /**
-     * Setter for Created at.
-     *
-     * @param \DateTimeInterface $createdAt Created at
+     * @param \DateTimeInterface $createdAt
+     * @return Tag
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
-     * Getter for Updated at.
-     *
-     * @return \DateTimeInterface|null Updated at
+     * @return \DateTimeInterface|null
      */
     public function getUpdatedAt(): ?\DateTimeInterface
     {
@@ -150,29 +147,18 @@ class Task
     }
 
     /**
-     * Setter for Updated at.
-     *
-     * @param \DateTimeInterface $updatedAt Updated at
+     * @param \DateTimeInterface $updatedAt
+     * @return Tag
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     /**
-     * Setter for Tags.
-     *
-     * @param \DateTimeInterface $tags Tags
-     */
-    public function setTags(string $tags): void
-    {
-        $this->$tags = $tags;
-    }
-
-    /**
-     * Getter for Title.
-     *
-     * @return string|null Title
+     * @return string|null
      */
     public function getTitle(): ?string
     {
@@ -180,55 +166,58 @@ class Task
     }
 
     /**
-     * Setter for Title.
-     *
-     * @param string $title Title
+     * @param string $title
+     * @return Tag
      */
-    public function setTitle(string $title): void
+    public function setTitle(string $title): self
     {
         $this->title = $title;
-    }
-
-    /**
-     * @return Category|null
-     */
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param Category|null $category
-     * @return Task
-     */
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * @return Collection|Tag[]
+     * @return string|null
      */
-    public function getTags(): Collection
+    public function getCode(): ?string
     {
-        return $this->tags;
+        return $this->code;
     }
 
-    public function addTag(Tag $tag): self
+    /**
+     * @param string $code
+     * @return Tag
+     */
+    public function setCode(string $code): self
     {
-        if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->addTag($this);
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeTask(Task $task): self
     {
-        if ($this->tags->contains($tag)) {
-            $this->tags->removeElement($tag);
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+            $task->removeTag($this);
         }
 
         return $this;

@@ -1,12 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'title.task_list'|trans }}
+    {{ 'tag.tag_list'|trans }}
 {% endblock %}
 
 {% block body %}
-    <h1>{{ 'title.task_list'|trans }}</h1>
+    <h1>{{ 'tag.tag_list'|trans }}</h1>
     {% if pagination is defined and pagination|length %}
+
+        <a href="{{ url('tag_new') }}" title="{{ 'action.new'|trans }}">
+            {{ 'action.new'|trans }}
+        </a>
 
         <table class="table table-striped">
             <thead>
@@ -15,26 +19,24 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 't.createdAt') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.updated_at'|trans, 't.updatedAt') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 't.title') }}</th>
-                <th>{{ 'label.category'|trans }}</th>
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
-            {% for task in pagination %}
+            {% for tag in pagination %}
                 <tr>
-                    <td>{{ task.id }}</td>
-                    <td>{{ task.createdAt|localizeddate }}</td>
-                    <td>{{ task.updatedAt|localizeddate }}</td>
-                    <td>{{ task.title }}</td>
-                    <td>{{ task.category.title }}</td>
+                    <td>{{ tag.id }}</td>
+                    <td>{{ tag.createdAt|localizeddate }}</td>
+                    <td>{{ tag.updatedAt|localizeddate }}</td>
+                    <td>{{ tag.title }}</td>
                     <td>
-                        <a href="{{ url('task_view', {id: task.id}) }}" title="{{ 'action.view'|trans }}">
+                        <a href="{{ url('tag_view', {id: tag.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}
                         </a>
-                        <a href="{{ url('task_edit', {id: task.id}) }}" title="{{ 'action.edit'|trans }}">
+                        <a href="{{ url('tag_edit', {id: tag.id}) }}" title="{{ 'action.edit'|trans }}">
                             {{ 'action.edit'|trans }}
                         </a>
-                        <a href="{{ url('task_delete', {id: task.id}) }}" title="{{ 'action.delete'|trans }}">
+                        <a href="{{ url('tag_delete', {id: tag.id}) }}" title="{{ 'action.delete'|trans }}">
                             {{ 'action.delete'|trans }}
                         </a>
                     </td>
@@ -42,12 +44,6 @@
             {% endfor %}
             </tbody>
         </table>
-
-        <div class="card">
-        <a class="btn" href="{{ url('task_new') }}" title="{{ 'action.new'|trans }}">
-            {{ 'action.new'|trans }}
-        </a>
-        </div>
 
         <div class="navigation text-center">
             {{ knp_pagination_render(pagination) }}

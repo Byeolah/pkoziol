@@ -1,8 +1,7 @@
 <?php
 /**
- * Task entity.
+ * Category entity.
  */
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,14 +12,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Task class.
+ * Category class.
  *
- * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
- * @ORM\Table(name="tasks")
+ * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+ * @ORM\Table(name="categories")
+ *
+ * @UniqueEntity(fields={"title"})
  */
-class Task
+class Category
 {
-
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.
@@ -29,6 +29,7 @@ class Task
      * @constant int NUMBER_OF_ITEMS
      */
     const NUMBER_OF_ITEMS = 10;
+
     /**
      * Primary key.
      *
@@ -73,7 +74,7 @@ class Task
      *
      * @ORM\Column(
      *     type="string",
-     *     length=255,
+     *     length=64
      * )
      *
      * @Assert\NotBlank
@@ -85,28 +86,42 @@ class Task
     private $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="tasks")
-     * @ORM\JoinColumn(nullable=false)
+     * Tasks.
+     *
+     * @var Collection|null
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="App\Entity\Task",
+     *     mappedBy="category",
+     *     fetch="EXTRA_LAZY")
      */
-    private $category;
+    private $tasks;
 
     /**
-     * Tags.
+     * Code.
      *
-     * @var array
+     * @var string
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="App\Entity\Tag",
-     *     inversedBy="tasks",
-     *     orphanRemoval=true
+     * @ORM\Column(
+     *     type="string",
+     *     length=64
      * )
-     * @ORM\JoinTable(name="tasks_tags")
+     *
+     * @Gedmo\Slug(fields={"title"})
+     *
+     * @Assert\Length(
+     *     min="3",
+     *     max="64",
+     * )
      */
-    private $tags;
+    private $code;
 
+    /**
+     * Category constructor.
+     */
     public function __construct()
     {
-        $this->tags = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     /**
@@ -160,16 +175,6 @@ class Task
     }
 
     /**
-     * Setter for Tags.
-     *
-     * @param \DateTimeInterface $tags Tags
-     */
-    public function setTags(string $tags): void
-    {
-        $this->$tags = $tags;
-    }
-
-    /**
      * Getter for Title.
      *
      * @return string|null Title
@@ -190,46 +195,52 @@ class Task
     }
 
     /**
-     * @return Category|null
+     * @return Collection|Task[]
      */
-    public function getCategory(): ?Category
+    public function getTasks(): Collection
     {
-        return $this->category;
+        return $this->tasks;
     }
 
     /**
-     * @param Category|null $category
-     * @return Task
+     * @param Task $task
+     * @return Category
      */
-    public function setCategory(?Category $category): self
+    public function addTask(Task $task): self
     {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Tag[]
-     */
-    public function getTags(): Collection
-    {
-        return $this->tags;
-    }
-
-    public function addTag(Tag $tag): self
-    {
-        if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    /**
+     * @param Task $task
+     * @return Category
+     */
+    public function removeTask(Task $task): self
     {
-        if ($this->tags->contains($tag)) {
-            $this->tags->removeElement($tag);
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+            // set the owning side to null (unless already changed)
+            if ($task->getCategory() === $this) {
+                $task->setCategory(null);
+            }
         }
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

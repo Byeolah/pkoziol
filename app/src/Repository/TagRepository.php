@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Category;
+use App\Entity\Tag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Category|null find($id, $lockMode = null, $lockVersion = null)
- * @method Category|null findOneBy(array $criteria, array $orderBy = null)
- * @method Category[]    findAll()
- * @method Category[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Tag|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Tag|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Tag[]    findAll()
+ * @method Tag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategoryRepository extends ServiceEntityRepository
+class TagRepository extends ServiceEntityRepository
 {
     /**
-     * CategoryRepository constructor.
+     * TagRepository constructor.
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Category::class);
+        parent::__construct($registry, Tag::class);
     }
 
     /**
@@ -50,35 +50,35 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * Save record.
      *
-     * @param \App\Entity\Category $category Category entity
+     * @param \App\Entity\Tag $tag Tag entity
      *
      * @return void
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(Category $category): void
+    public function save(Tag $tag): void
     {
-        $this->_em->persist($category);
-        $this->_em->flush($category);
+        $this->_em->persist($tag);
+        $this->_em->flush($tag);
     }
 
     /**
      * Delete record.
      *
-     * @param \App\Entity\Category $category Category entity
+     * @param \App\Entity\Tag $tag Tag entity
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function delete(Category $category): void
+    public function delete(Tag $tag): void
     {
-        $this->_em->remove($category);
-        $this->_em->flush($category);
+        $this->_em->remove($tag);
+        $this->_em->flush($tag);
     }
 
     // /**
-    //  * @return Category[] Returns an array of Category objects
+    //  * @return Tag[] Returns an array of Tag objects
     //  */
     /*
     public function findByExampleField($value)
@@ -95,7 +95,7 @@ class CategoryRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Category
+    public function findOneBySomeField($value): ?Tag
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
