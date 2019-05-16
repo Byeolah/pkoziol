@@ -17,21 +17,17 @@ class HelloWorldController extends AbstractController
     /**
      * Index action.
      *
-     * @param string $name User input
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
      * @Route(
-     *     "/hello/{name}",
-     *     defaults={"name":"World"},
-     *     requirements={"name": "[a-zA-Z]+"},
+     *     "/",
      * )
      */
-    public function index(string $name): Response
+    public function index(): Response
     {
         return $this->render(
-            'hello-world/index.html.twig',
-            ['name' => $name]
+            'hello/index.html.twig'
         );
     }
 }

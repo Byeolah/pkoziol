@@ -106,10 +106,6 @@ class Tag
      */
     private $tasks;
 
-    public function __construct()
-    {
-        $this->tasks = new ArrayCollection();
-    }
 
     /**
      * @return int|null
@@ -203,6 +199,10 @@ class Tag
         return $this->tasks;
     }
 
+    /**
+     * @param Task $task
+     * @return Tag
+     */
     public function addTask(Task $task): self
     {
         if (!$this->tasks->contains($task)) {
@@ -213,6 +213,10 @@ class Tag
         return $this;
     }
 
+    /**
+     * @param Task $task
+     * @return Tag
+     */
     public function removeTask(Task $task): self
     {
         if ($this->tasks->contains($task)) {

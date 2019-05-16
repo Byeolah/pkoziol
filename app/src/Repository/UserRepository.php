@@ -14,9 +14,43 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    /**
+     * UserRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /**
+     * Save record.
+     *
+     * @param \App\Entity\Calendar $calendar Calendar entity
+     *
+     * @return void
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(User $user): void
+    {
+        $this->_em->persist($user);
+        $this->_em->flush($user);
+    }
+
+    /**
+     * Delete record.
+     *
+     * @param \App\Entity\Calendar $calendar Calendar entity
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(User $user): void
+    {
+        $this->_em->remove($user);
+        $this->_em->flush($user);
     }
 
     // /**

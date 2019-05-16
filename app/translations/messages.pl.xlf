@@ -98,6 +98,14 @@
                 <source>title.calendar_delete</source>
                 <target>Usuń wydarzenie</target>
             </trans-unit>
+            <trans-unit id="title.profile_new">
+                <source>title.profile_new</source>
+                <target>Zarejestruj się</target>
+            </trans-unit>
+            <trans-unit id="title.task_edit">
+                <source>title.task_edit</source>
+                <target>Edytuj zadanie</target>
+            </trans-unit>
 
             <trans-unit id="label.category">
                 <source>label.category</source>
@@ -114,6 +122,10 @@
             <trans-unit id="label.password">
                 <source>label.password</source>
                 <target>Hasło</target>
+            </trans-unit>
+            <trans-unit id="label.repeat_password">
+                <source>label.repeat_password</source>
+                <target>Powtórz hasło</target>
             </trans-unit>
             <trans-unit id="label.name">
                 <source>label.name</source>
@@ -168,10 +180,22 @@
                 <source>action.back_to_list</source>
                 <target>Powrót</target>
             </trans-unit>
+            <trans-unit id="action.profile">
+                <source>action.profile</source>
+                <target>Konto</target>
+            </trans-unit>
 
             <trans-unit id="category.task_list">
                 <source>category.task_list</source>
                 <target>Lista kategorii</target>
+            </trans-unit>
+            <trans-unit id="title.mynote">
+                <source>title.mynote</source>
+                <target>MyNote</target>
+            </trans-unit>
+            <trans-unit id="mynote.index">
+                <source>mynote.index</source>
+                <target>MyNote - aplikacja do zarządzania informacją osobistą</target>
             </trans-unit>
 
             <trans-unit id="message.created_successfully">
@@ -193,6 +217,14 @@
             <trans-unit id="message.empty_list">
                 <source>message.empty_list</source>
                 <target>Brak rekordów do wyświetlenia.</target>
+            </trans-unit>
+            <trans-unit id="message.form_error">
+                <source>message.form_error</source>
+                <target>Błąd formularza</target>
+            </trans-unit>
+            <trans-unit id="message.user_created_successfully">
+                <source>message.user_created_successfully</source>
+                <target>Konto zostało utworzone!</target>
             </trans-unit>
 
 

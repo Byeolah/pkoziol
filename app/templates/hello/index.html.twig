@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.mynote'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'mynote.index'|trans }}</h1>
+    <h2><a href="{{ url('security_login') }}" title="{{ 'title.login'|trans }}">
+        {{ 'action.login'|trans }}
+        </a></h2>
+    <h2><a href="{{ url('profile_new') }}" title="{{ 'title.profile_new'|trans }}">
+            {{ 'action.login'|trans }}
+        </a></h2>
+
+{% endblock %}
