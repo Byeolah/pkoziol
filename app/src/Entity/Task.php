@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +22,7 @@ class Task
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.
-     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options
+     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options.
      *
      * @constant int NUMBER_OF_ITEMS
      */
@@ -102,6 +101,13 @@ class Task
      * @ORM\JoinTable(name="tasks_tags")
      */
     private $tags;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="tasks")
+     *
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function __construct()
     {
@@ -198,6 +204,7 @@ class Task
 
     /**
      * @param Category|null $category
+     *
      * @return Task
      */
     public function setCategory(?Category $category): self
@@ -215,6 +222,10 @@ class Task
         return $this->tags;
     }
 
+    /**
+     * @param Tag $tag
+     * @return Task
+     */
     public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
@@ -224,11 +235,34 @@ class Task
         return $this;
     }
 
+    /**
+     * @param Tag $tag
+     * @return Task
+     */
     public function removeTag(Tag $tag): self
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param User|null $author
+     * @return Task
+     */
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

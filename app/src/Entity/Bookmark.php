@@ -2,15 +2,13 @@
 /**
  * Bookmark entity.
  */
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,7 +22,7 @@ class Bookmark
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.
-     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options
+     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options.
      *
      * @constant int NUMBER_OF_ITEMS
      */
@@ -92,6 +90,31 @@ class Bookmark
     private $updatedAt;
 
     /**
+     * Tags.
+     *
+     * @var array
+     *
+     * @ORM\ManyToMany(
+     *     targetEntity="App\Entity\TagBookmark",
+     *     inversedBy="bookmarks",
+     *     orphanRemoval=true
+     * )
+     * @ORM\JoinTable(name="bookmarks_tags")
+     */
+    private $tags;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="bookmarks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
+    /**
      * Getter for Id.
      *
      * @return int|null Id
@@ -115,6 +138,7 @@ class Bookmark
      * Setter for Title.
      *
      * @param string $title
+     *
      * @return Bookmark
      */
     public function setTitle(string $title): self
@@ -138,6 +162,7 @@ class Bookmark
      * Setter for URL.
      *
      * @param string $url
+     *
      * @return Bookmark
      */
     public function setUrl(string $url): self
@@ -191,4 +216,51 @@ class Bookmark
         return $this;
     }
 
+    /**
+     * @return Collection|TagBookmark[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param TagBookmark $tag
+     *
+     * @return Bookmark
+     */
+    public function addTag(TagBookmark $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param TagBookmark $tag
+     *
+     * @return Bookmark
+     */
+    public function removeTag(TagBookmark $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
 }

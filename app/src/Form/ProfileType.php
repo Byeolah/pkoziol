@@ -47,7 +47,7 @@ class ProfileType extends AbstractType
                 'type' => PasswordType::class,
                 'required' => true,
                 'attr' => ['max_length' => 40],
-                'first_options'  => ['label' => 'label.password'],
+                'first_options' => ['label' => 'label.password'],
                 'second_options' => ['label' => 'label.repeat_password'],
             ]
         );
@@ -60,8 +60,6 @@ class ProfileType extends AbstractType
                 'attr' => ['max_length' => 12],
             ]
         );
-
-
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Entity\Calendar;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * @method Calendar|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CalendarRepository extends ServiceEntityRepository
 {
+    /**
+     * CalendarRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Calendar::class);
@@ -51,8 +56,6 @@ class CalendarRepository extends ServiceEntityRepository
      *
      * @param \App\Entity\Calendar $calendar Calendar entity
      *
-     * @return void
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -76,6 +79,24 @@ class CalendarRepository extends ServiceEntityRepository
         $this->_em->flush($calendar);
     }
 
+    /**
+     * Query tasks by author.
+     *
+     * @param \App\Entity\User|null $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user = null): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        if (!is_null($user)) {
+            $queryBuilder->andWhere('t.author = :author')
+                ->setParameter('author', $user);
+        }
+
+        return $queryBuilder;
+    }
 
     // /**
     //  * @return Calendar[] Returns an array of Calendar objects

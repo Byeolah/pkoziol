@@ -8,8 +8,6 @@
     <h1>{{ 'title.bookmark_list'|trans({'%id%': bookmark.id|default('')}) }}</h1>
     {% if bookmark is defined and bookmark|length %}
         <dl class="dl-horizontal">
-            <dt>{{ 'label.id'|trans }}</dt>
-            <dd>{{ bookmark.id }}</dd>
             <dt>{{ 'label.title'|trans }}</dt>
             <dd>{{ bookmark.title }}</dd>
             <dt>{{ 'label.url'|trans }}</dt>
@@ -18,10 +16,28 @@
             <dd>{{ bookmark.createdAt|localizeddate }}</dd>
             <dt>{{ 'label.updated_at'|trans }}</dt>
             <dd>{{ bookmark.updatedAt|localizeddate }}</dd>
+            <dt>{{ 'label.tags'|trans }}</dt>
+            <dd>
+                {% for row in bookmark.tags %}
+                    {{ row.title }}
+                    {%- if not loop.last -%}
+                        ,
+                    {% endif %}
+                {% endfor %}
+            </dd>
         </dl>
     {% else %}
         <p>
             {{ 'message.item_not_found'|trans }}
         </p>
     {% endif %}
+    <a class="btn" href="{{ url('bookmark_index') }}" title="{{ 'action.back_to_list'|trans }}">
+        {{ 'action.back_to_list'|trans }}
+    </a>
+    <a class="btn" href="{{ url('bookmark_edit',{id: bookmark.id}) }}" title="{{ 'action.edit'|trans }}">
+        {{ 'action.edit'|trans }}
+    </a>
+    <a class="btn" href="{{ url('bookmark_delete',{id: bookmark .id}) }}" title="{{ 'action.delete'|trans }}">
+        {{ 'action.delete'|trans }}
+    </a>
 {% endblock %}

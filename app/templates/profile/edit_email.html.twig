@@ -1,8 +1,8 @@
 {% include 'default/_form.html.twig' with {
-    page_title: 'title.email_edit',
+    page_title: 'action.edit_email',
     attr: {
         method: 'PUT',
         action: url('email_edit', {'id': app.user.id}),
     },
-    back_to_list_path: 'task_index',
+    back_to_list_path: 'task_index'
 } %}

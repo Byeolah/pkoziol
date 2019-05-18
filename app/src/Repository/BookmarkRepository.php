@@ -9,6 +9,7 @@ use App\Entity\Bookmark;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * @method Bookmark|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class BookmarkRepository extends ServiceEntityRepository
 {
+    /**
+     * BookmarkRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Bookmark::class);
@@ -51,8 +56,6 @@ class BookmarkRepository extends ServiceEntityRepository
      *
      * @param \App\Entity\Bookmark $bookmark Bookmark entity
      *
-     * @return void
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -74,6 +77,25 @@ class BookmarkRepository extends ServiceEntityRepository
     {
         $this->_em->remove($bookmark);
         $this->_em->flush($bookmark);
+    }
+
+    /**
+     * Query bookmarks by author.
+     *
+     * @param \App\Entity\User|null $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user = null): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        if (!is_null($user)) {
+            $queryBuilder->andWhere('t.author = :author')
+                ->setParameter('author', $user);
+        }
+
+        return $queryBuilder;
     }
 
     // /**

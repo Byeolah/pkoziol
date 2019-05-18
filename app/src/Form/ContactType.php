@@ -5,12 +5,8 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
-use App\Entity\Tag;
 use App\Entity\Contact;
-use App\Form\DataTransformer\TagsDataTransformer;
-use App\Repository\TagRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Form\DataTransformer\TagsContactsDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -25,7 +21,7 @@ class ContactType extends AbstractType
     /**
      * Tags data transformer.
      *
-     * @var \App\Form\DataTransformer\TagsDataTransformer|null
+     * @var \App\Form\DataTransformer\TagsContactsDataTransformer|null
      */
     private $tagsDataTransformer = null;
 
@@ -34,7 +30,7 @@ class ContactType extends AbstractType
      *
      * @param \App\Form\DataTransformer\TagsDataTransformer $tagsDataTransformer Tags data transformer
      */
-    public function __construct(TagsDataTransformer $tagsDataTransformer)
+    public function __construct(TagsContactsDataTransformer $tagsDataTransformer)
     {
         $this->tagsDataTransformer = $tagsDataTransformer;
     }
@@ -79,8 +75,20 @@ class ContactType extends AbstractType
                 'attr' => ['max_length' => 12],
             ]
         );
-
-
+        $builder->add(
+            'tags',
+            TextType::class,
+            [
+                'label' => 'label.tags',
+                'required' => false,
+                'attr' => [
+                    'max_length' => 255,
+                ],
+            ]
+        );
+        $builder->get('tags')->addModelTransformer(
+            $this->tagsDataTransformer
+        );
     }
 
     /**

@@ -2,7 +2,9 @@
 /**
  * Task controller.
  */
+
 namespace App\Controller;
+
 use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
@@ -12,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * Class TaskController.
  *
@@ -36,10 +39,11 @@ class TaskController extends AbstractController
     public function index(Request $request, TaskRepository $repository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $repository->queryAll(),
+            $repository->queryByAuthor($this->getUser()),
             $request->query->getInt('page', 1),
             Task::NUMBER_OF_ITEMS
         );
+
         return $this->render(
             'task/index.html.twig',
             ['pagination' => $pagination]
@@ -61,6 +65,12 @@ class TaskController extends AbstractController
      */
     public function view(Task $task): Response
     {
+        if ($task->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('task_index');
+        }
+
         return $this->render(
             'task/view.html.twig',
             ['task' => $task]
@@ -71,7 +81,7 @@ class TaskController extends AbstractController
      * New action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\TaskRepository        $repository Task repository
+     * @param \App\Repository\TaskRepository            $repository Task repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -91,6 +101,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $task->setAuthor($this->getUser());
             $repository->save($task);
 
             $this->addFlash('success', 'message.created_successfully');
@@ -188,5 +199,4 @@ class TaskController extends AbstractController
             ]
         );
     }
-
 }

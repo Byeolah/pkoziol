@@ -6,6 +6,7 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -58,8 +59,6 @@ class TaskRepository extends ServiceEntityRepository
      *
      * @param \App\Entity\Task $task Task entity
      *
-     * @return void
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -81,6 +80,25 @@ class TaskRepository extends ServiceEntityRepository
     {
         $this->_em->remove($task);
         $this->_em->flush($task);
+    }
+
+    /**
+     * Query tasks by author.
+     *
+     * @param \App\Entity\User|null $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user = null): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        if (!is_null($user)) {
+            $queryBuilder->andWhere('t.author = :author')
+                ->setParameter('author', $user);
+        }
+
+        return $queryBuilder;
     }
 
     // /**

@@ -2,7 +2,9 @@
 /**
  * Calendar controller.
  */
+
 namespace App\Controller;
+
 use App\Entity\Calendar;
 use App\Form\CalendarType;
 use App\Repository\CalendarRepository;
@@ -12,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * Class CalendarController.
  *
@@ -23,7 +26,7 @@ class CalendarController extends AbstractController
      * Index action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\CalendarRepository            $repository Repository
+     * @param \App\Repository\CalendarRepository        $repository Repository
      * @param \Knp\Component\Pager\PaginatorInterface   $paginator  Paginator
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
@@ -36,7 +39,7 @@ class CalendarController extends AbstractController
     public function index(Request $request, CalendarRepository $repository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $repository->queryAll(),
+            $repository->queryByAuthor($this->getUser()),
             $request->query->getInt('page', 1),
             Calendar::NUMBER_OF_ITEMS
         );
@@ -62,6 +65,12 @@ class CalendarController extends AbstractController
      */
     public function view(Calendar $calendar): Response
     {
+        if ($calendar->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('calendar_index');
+        }
+
         return $this->render(
             'calendar/view.html.twig',
             ['calendar' => $calendar]
@@ -92,6 +101,7 @@ class CalendarController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $calendar->setAuthor($this->getUser());
             $repository->save($calendar);
 
             $this->addFlash('success', 'message.created_successfully');
@@ -109,8 +119,8 @@ class CalendarController extends AbstractController
      * Edit action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Calendar                          $calendar       Calendar entity
-     * @param \App\Repository\CalendarRepository            $repository Calendar repository
+     * @param \App\Entity\Calendar                      $calendar   Calendar entity
+     * @param \App\Repository\CalendarRepository        $repository Calendar repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -126,6 +136,12 @@ class CalendarController extends AbstractController
      */
     public function edit(Request $request, Calendar $calendar, CalendarRepository $repository): Response
     {
+        if ($calendar->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('calendar_index');
+        }
+
         $form = $this->createForm(CalendarType::class, $calendar, ['method' => 'PUT']);
         $form->handleRequest($request);
 
@@ -150,8 +166,8 @@ class CalendarController extends AbstractController
      * Delete action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Calendar                          $calendar       Calendar entity
-     * @param \App\Repository\CalendarRepository            $repository Calendar repository
+     * @param \App\Entity\Calendar                      $calendar   Calendar entity
+     * @param \App\Repository\CalendarRepository        $repository Calendar repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -167,6 +183,12 @@ class CalendarController extends AbstractController
      */
     public function delete(Request $request, Calendar $calendar, CalendarRepository $repository): Response
     {
+        if ($calendar->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('calendar_index');
+        }
+
         $form = $this->createForm(FormType::class, $calendar, ['method' => 'DELETE']);
         $form->handleRequest($request);
 
@@ -189,5 +211,4 @@ class CalendarController extends AbstractController
             ]
         );
     }
-
 }

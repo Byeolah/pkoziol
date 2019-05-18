@@ -8,6 +8,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\User;
 
 /**
  * Class HelloWorldController.
@@ -22,6 +23,7 @@ class HelloWorldController extends AbstractController
      *
      * @Route(
      *     "/",
+     *     name="base_index",
      * )
      */
     public function index(): Response
@@ -29,5 +31,6 @@ class HelloWorldController extends AbstractController
         return $this->render(
             'hello/index.html.twig'
         );
+
     }
 }

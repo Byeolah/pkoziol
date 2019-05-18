@@ -9,6 +9,7 @@ use App\Entity\Contact;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * ContactRepository class.
@@ -58,8 +59,6 @@ class ContactRepository extends ServiceEntityRepository
      *
      * @param \App\Entity\Contact $contact Contact entity
      *
-     * @return void
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
@@ -81,6 +80,25 @@ class ContactRepository extends ServiceEntityRepository
     {
         $this->_em->remove($contact);
         $this->_em->flush($contact);
+    }
+
+    /**
+     * Query notes by author.
+     *
+     * @param \App\Entity\User|null $user User entity
+     *
+     * @return \Doctrine\ORM\QueryBuilder Query builder
+     */
+    public function queryByAuthor(User $user = null): QueryBuilder
+    {
+        $queryBuilder = $this->queryAll();
+
+        if (!is_null($user)) {
+            $queryBuilder->andWhere('t.author = :author')
+                ->setParameter('author', $user);
+        }
+
+        return $queryBuilder;
     }
 
     // /**

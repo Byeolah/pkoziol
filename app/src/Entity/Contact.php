@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,7 +19,7 @@ class Contact
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.
-     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options
+     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options.
      *
      * @constant int NUMBER_OF_ITEMS
      */
@@ -104,6 +103,34 @@ class Contact
     private $updatedAt;
 
     /**
+     * Tags.
+     *
+     * @var array
+     *
+     * @ORM\ManyToMany(
+     *     targetEntity="App\Entity\TagContact",
+     *     inversedBy="contacts",
+     *     orphanRemoval=true
+     * )
+     * @ORM\JoinTable(name="contacts_tags")
+     */
+    private $tags;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="contacts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
+     * Contact constructor.
+     */
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
+    /**
      * Getter for Id.
      *
      * @return int|null Id
@@ -127,6 +154,7 @@ class Contact
      * Setter for Name.
      *
      * @param string $name
+     *
      * @return Contact
      */
     public function setName(string $name): self
@@ -150,6 +178,7 @@ class Contact
      * Setter for Surname.
      *
      * @param string $surname
+     *
      * @return Contact
      */
     public function setSurname(string $surname): self
@@ -173,6 +202,7 @@ class Contact
      * Setter for Phone.
      *
      * @param int $phone
+     *
      * @return Contact
      */
     public function setPhone(int $phone): self
@@ -222,6 +252,54 @@ class Contact
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TagContact[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param TagContact $tag
+     *
+     * @return Contact
+     */
+    public function addTag(TagContact $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param TagContact $tag
+     *
+     * @return Contact
+     */
+    public function removeTag(TagContact $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

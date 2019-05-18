@@ -18,6 +18,13 @@
             <dd>{{  task.category.title }}</dd>
             <dt>{{ 'label.title'|trans }}</dt>
             <dd>{{  task.title }}</dd>
+            <dt>{{ 'label.tags'|trans }}</dt>
+            <dd>
+            {% for row in task.tags %}
+                {{ row.title }}
+            {% endfor %}
+            </dd>
+
         </dl>
     {% else %}
         <p>

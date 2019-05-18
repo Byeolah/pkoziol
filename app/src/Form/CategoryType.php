@@ -62,7 +62,4 @@ class CategoryType extends AbstractType
     {
         return 'category';
     }
-
-
 }
-

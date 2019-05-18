@@ -15,8 +15,6 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.name'|trans, 't.name') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.surname'|trans, 't.surname') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.phone'|trans, 't.phone') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 't.createdAt') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.updated_at'|trans, 't.updatedAt') }}</th>
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -27,8 +25,6 @@
                     <td>{{ contact.name }}</td>
                     <td>{{ contact.surname }}</td>
                     <td>{{ contact.phone }}</td>
-                    <td>{{ contact.createdAt|localizeddate }}</td>
-                    <td>{{ contact.updatedAt|localizeddate }}</td>
                     <td>
                         <a href="{{ url('contact_view', {id: contact.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}

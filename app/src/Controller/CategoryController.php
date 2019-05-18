@@ -7,7 +7,6 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
-
 use App\Repository\CategoryRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

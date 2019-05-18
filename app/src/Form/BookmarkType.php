@@ -5,15 +5,10 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
-use App\Entity\Tag;
 use App\Entity\Bookmark;
-use App\Form\DataTransformer\TagsDataTransformer;
-use App\Repository\TagRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Form\DataTransformer\TagsBookmarksDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,18 +18,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class BookmarkType extends AbstractType
 {
     /**
-     * Tags data transformer.
+     * TagsBookmarks data transformer.
      *
-     * @var \App\Form\DataTransformer\TagsDataTransformer|null
+     * @var \App\Form\DataTransformer\TagsBookmarksDataTransformer|null
      */
     private $tagsDataTransformer = null;
 
     /**
      * BookmarkType constructor.
      *
-     * @param \App\Form\DataTransformer\TagsDataTransformer $tagsDataTransformer Tags data transformer
+     * @param \App\Form\DataTransformer\TagsBookmarksDataTransformer $tagsDataTransformer TagsBookmarks data transformer
      */
-    public function __construct(TagsDataTransformer $tagsDataTransformer)
+    public function __construct(TagsBookmarksDataTransformer $tagsDataTransformer)
     {
         $this->tagsDataTransformer = $tagsDataTransformer;
     }
@@ -69,6 +64,20 @@ class BookmarkType extends AbstractType
                 'required' => true,
                 'attr' => ['max_length' => 255],
             ]
+        );
+        $builder->add(
+            'tags',
+            TextType::class,
+            [
+                'label' => 'label.tags',
+                'required' => false,
+                'attr' => [
+                    'max_length' => 255,
+                ],
+            ]
+        );
+        $builder->get('tags')->addModelTransformer(
+            $this->tagsDataTransformer
         );
     }
 

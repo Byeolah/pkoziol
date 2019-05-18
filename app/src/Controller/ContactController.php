@@ -2,7 +2,9 @@
 /**
  * Contact controller.
  */
+
 namespace App\Controller;
+
 use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Repository\ContactRepository;
@@ -12,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * Class ContactController.
  *
@@ -23,7 +26,7 @@ class ContactController extends AbstractController
      * Index action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\ContactRepository            $repository Repository
+     * @param \App\Repository\ContactRepository         $repository Repository
      * @param \Knp\Component\Pager\PaginatorInterface   $paginator  Paginator
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
@@ -36,10 +39,11 @@ class ContactController extends AbstractController
     public function index(Request $request, ContactRepository $repository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $repository->queryAll(),
+            $repository->queryByAuthor($this->getUser()),
             $request->query->getInt('page', 1),
             Contact::NUMBER_OF_ITEMS
         );
+
         return $this->render(
             'contact/index.html.twig',
             ['pagination' => $pagination]
@@ -61,6 +65,12 @@ class ContactController extends AbstractController
      */
     public function view(Contact $contact): Response
     {
+        if ($contact->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('contact_index');
+        }
+
         return $this->render(
             'contact/view.html.twig',
             ['contact' => $contact]
@@ -71,7 +81,7 @@ class ContactController extends AbstractController
      * New action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\contactRepository        $repository Contact repository
+     * @param \App\Repository\contactRepository         $repository Contact repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -91,6 +101,7 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $contact->setAuthor($this->getUser());
             $repository->save($contact);
 
             $this->addFlash('success', 'message.created_successfully');
@@ -108,8 +119,8 @@ class ContactController extends AbstractController
      * Edit action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Contact                          $contact       Contact entity
-     * @param \App\Repository\ContactRepository            $repository Contact repository
+     * @param \App\Entity\Contact                       $contact    Contact entity
+     * @param \App\Repository\ContactRepository         $repository Contact repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -125,6 +136,12 @@ class ContactController extends AbstractController
      */
     public function edit(Request $request, Contact $contact, ContactRepository $repository): Response
     {
+        if ($contact->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('contact_index');
+        }
+
         $form = $this->createForm(ContactType::class, $contact, ['method' => 'PUT']);
         $form->handleRequest($request);
 
@@ -149,8 +166,8 @@ class ContactController extends AbstractController
      * Delete action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Contact                          $contact       Contact entity
-     * @param \App\Repository\ContactRepository            $repository Contact repository
+     * @param \App\Entity\Contact                       $contact    Contact entity
+     * @param \App\Repository\ContactRepository         $repository Contact repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -166,6 +183,12 @@ class ContactController extends AbstractController
      */
     public function delete(Request $request, Contact $contact, ContactRepository $repository): Response
     {
+        if ($contact->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('contact_index');
+        }
+
         $form = $this->createForm(FormType::class, $contact, ['method' => 'DELETE']);
         $form->handleRequest($request);
 
@@ -188,5 +211,4 @@ class ContactController extends AbstractController
             ]
         );
     }
-
 }

@@ -5,12 +5,8 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
-use App\Entity\Tag;
 use App\Entity\Calendar;
-use App\Form\DataTransformer\TagsDataTransformer;
-use App\Repository\TagRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Form\DataTransformer\TagsCalendarsDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -23,9 +19,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CalendarType extends AbstractType
 {
     /**
-     * Tags data transformer.
+     * TagsCalendars data transformer.
      *
-     * @var \App\Form\DataTransformer\TagsDataTransformer|null
+     * @var \App\Form\DataTransformer\TagsCalendarsDataTransformer|null
      */
     private $tagsDataTransformer = null;
 
@@ -34,7 +30,7 @@ class CalendarType extends AbstractType
      *
      * @param \App\Form\DataTransformer\TagsDataTransformer $tagsDataTransformer Tags data transformer
      */
-    public function __construct(TagsDataTransformer $tagsDataTransformer)
+    public function __construct(TagsCalendarsDataTransformer $tagsDataTransformer)
     {
         $this->tagsDataTransformer = $tagsDataTransformer;
     }
@@ -68,6 +64,20 @@ class CalendarType extends AbstractType
                 'label' => 'label.date',
                 'required' => true,
             ]
+        );
+        $builder->add(
+            'tags',
+            TextType::class,
+            [
+                'label' => 'label.tags',
+                'required' => false,
+                'attr' => [
+                    'max_length' => 255,
+                ],
+            ]
+        );
+        $builder->get('tags')->addModelTransformer(
+            $this->tagsDataTransformer
         );
     }
 

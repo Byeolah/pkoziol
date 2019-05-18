@@ -3,13 +3,13 @@
 /**
  * Calendar entity.
  */
+
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -23,7 +23,7 @@ class Calendar
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.
-     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options
+     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options.
      *
      * @constant int NUMBER_OF_ITEMS
      */
@@ -86,6 +86,34 @@ class Calendar
     private $updatedAt;
 
     /**
+     * Tags.
+     *
+     * @var array
+     *
+     * @ORM\ManyToMany(
+     *     targetEntity="App\Entity\TagCalendar",
+     *     inversedBy="calendars",
+     *     orphanRemoval=true
+     * )
+     * @ORM\JoinTable(name="calendars_tags")
+     */
+    private $tags;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="calendars")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
+     * Calendar constructor.
+     */
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
+
+    /**
      * Getter for Id.
      *
      * @return int|null Id
@@ -109,6 +137,7 @@ class Calendar
      * Setter for Date.
      *
      * @param \DateTimeInterface $date
+     *
      * @return Calendar
      */
     public function setDate(\DateTimeInterface $date): self
@@ -132,6 +161,7 @@ class Calendar
      * Setter for Event.
      *
      * @param string $event
+     *
      * @return Calendar
      */
     public function setEvent(string $event): self
@@ -181,6 +211,44 @@ class Calendar
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TagCalendar[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(TagCalendar $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(TagCalendar $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+        }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

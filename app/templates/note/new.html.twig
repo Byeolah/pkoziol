@@ -1,0 +1,8 @@
+{% include 'default/_form.html.twig' with {
+    page_title: 'title.note_new',
+    attr: {
+        method: 'POST',
+        action: url('note_new')
+    },
+    back_to_list_path: 'note_index',
+} %}

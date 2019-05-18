@@ -29,7 +29,7 @@ security:
 
             logout:
                 path: security_logout
-                target: task_index
+                target: base_index
 
             switch_user: false
             logout_on_user_change: true
@@ -49,6 +49,7 @@ security:
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
         - { path: ^/profile/new, roles: IS_AUTHENTICATED_ANONYMOUSLY}
+        - { path: ^/tag, roles: ROLE_ADMIN}
         - { path: ^/task, roles: ROLE_USER}
         - { path: ^/calendar, roles: ROLE_USER}
         - { path: ^/contact, roles: ROLE_USER}

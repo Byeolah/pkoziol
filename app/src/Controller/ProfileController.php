@@ -11,12 +11,10 @@ use App\Repository\UserRepository;
 use App\Form\EmailType;
 use App\Form\ProfileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ProfileController.
@@ -25,7 +23,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ProfileController extends AbstractController
 {
-
     /**
      * View action.
      *
@@ -43,7 +40,7 @@ class ProfileController extends AbstractController
     {
         return $this->render(
             'profile/view.html.twig',
-            ['user'=>$user]
+            ['user' => $user]
         );
     }
 
@@ -51,7 +48,7 @@ class ProfileController extends AbstractController
      * New action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\UserRepository        $repository User repository
+     * @param \App\Repository\UserRepository            $repository User repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -77,10 +74,9 @@ class ProfileController extends AbstractController
             )
         );
 
-        $profile->setRoles(array('ROLE_USER'));
+        $profile->setRoles(['ROLE_USER']);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $repository->save($profile);
 
             $this->addFlash('success', 'message.user_created_successfully');

@@ -17,6 +17,7 @@ class TagRepository extends ServiceEntityRepository
 {
     /**
      * TagRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -51,8 +52,6 @@ class TagRepository extends ServiceEntityRepository
      * Save record.
      *
      * @param \App\Entity\Tag $tag Tag entity
-     *
-     * @return void
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException

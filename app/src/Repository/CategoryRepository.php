@@ -17,6 +17,7 @@ class CategoryRepository extends ServiceEntityRepository
 {
     /**
      * CategoryRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -51,8 +52,6 @@ class CategoryRepository extends ServiceEntityRepository
      * Save record.
      *
      * @param \App\Entity\Category $category Category entity
-     *
-     * @return void
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException

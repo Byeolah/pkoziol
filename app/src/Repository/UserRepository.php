@@ -16,6 +16,7 @@ class UserRepository extends ServiceEntityRepository
 {
     /**
      * UserRepository constructor.
+     *
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -27,8 +28,6 @@ class UserRepository extends ServiceEntityRepository
      * Save record.
      *
      * @param \App\Entity\Calendar $calendar Calendar entity
-     *
-     * @return void
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException

@@ -2,7 +2,9 @@
 /**
  * Bookmark controller.
  */
+
 namespace App\Controller;
+
 use App\Entity\Bookmark;
 use App\Form\BookmarkType;
 use App\Repository\BookmarkRepository;
@@ -12,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * Class BookmarkController.
  *
@@ -23,7 +26,7 @@ class BookmarkController extends AbstractController
      * Index action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\BookmarkRepository            $repository Repository
+     * @param \App\Repository\BookmarkRepository        $repository Repository
      * @param \Knp\Component\Pager\PaginatorInterface   $paginator  Paginator
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
@@ -36,10 +39,11 @@ class BookmarkController extends AbstractController
     public function index(Request $request, BookmarkRepository $repository, PaginatorInterface $paginator): Response
     {
         $pagination = $paginator->paginate(
-            $repository->queryAll(),
+            $repository->queryByAuthor($this->getUser()),
             $request->query->getInt('page', 1),
             Bookmark::NUMBER_OF_ITEMS
         );
+
         return $this->render(
             'bookmark/index.html.twig',
             ['pagination' => $pagination]
@@ -61,6 +65,12 @@ class BookmarkController extends AbstractController
      */
     public function view(Bookmark $bookmark): Response
     {
+        if ($bookmark->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('bookmark_index');
+        }
+
         return $this->render(
             'bookmark/view.html.twig',
             ['bookmark' => $bookmark]
@@ -91,6 +101,7 @@ class BookmarkController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $bookmark->setAuthor($this->getUser());
             $repository->save($bookmark);
 
             $this->addFlash('success', 'message.created_successfully');
@@ -108,8 +119,8 @@ class BookmarkController extends AbstractController
      * Edit action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Bookmark                          $bookmark       Bookmark entity
-     * @param \App\Repository\BookmarkRepository            $repository Bookmark repository
+     * @param \App\Entity\Bookmark                      $bookmark   Bookmark entity
+     * @param \App\Repository\BookmarkRepository        $repository Bookmark repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -125,6 +136,12 @@ class BookmarkController extends AbstractController
      */
     public function edit(Request $request, Bookmark $bookmark, BookmarkRepository $repository): Response
     {
+        if ($bookmark->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('bookmark_index');
+        }
+
         $form = $this->createForm(BookmarkType::class, $bookmark, ['method' => 'PUT']);
         $form->handleRequest($request);
 
@@ -149,8 +166,8 @@ class BookmarkController extends AbstractController
      * Delete action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Bookmark                          $bookmark       Bookmark entity
-     * @param \App\Repository\BookmarkRepository            $repository Bookmark repository
+     * @param \App\Entity\Bookmark                      $bookmark   Bookmark entity
+     * @param \App\Repository\BookmarkRepository        $repository Bookmark repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -166,6 +183,12 @@ class BookmarkController extends AbstractController
      */
     public function delete(Request $request, Bookmark $bookmark, BookmarkRepository $repository): Response
     {
+        if ($bookmark->getAuthor() !== $this->getUser()) {
+            $this->addFlash('warning', 'message.item_not_found');
+
+            return $this->redirectToRoute('bookmark_index');
+        }
+
         $form = $this->createForm(FormType::class, $bookmark, ['method' => 'DELETE']);
         $form->handleRequest($request);
 
@@ -188,5 +211,4 @@ class BookmarkController extends AbstractController
             ]
         );
     }
-
 }

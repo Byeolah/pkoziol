@@ -7,7 +7,6 @@ namespace App\Controller;
 
 use App\Entity\Tag;
 use App\Form\TagType;
-
 use App\Repository\TagRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +26,7 @@ class TagController extends AbstractController
      * Index action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\TagRepository        $repository Tag repository
+     * @param \App\Repository\TagRepository             $repository Tag repository
      * @param \Knp\Component\Pager\PaginatorInterface   $paginator  Paginator
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -76,7 +75,7 @@ class TagController extends AbstractController
      * New action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Repository\TagRepository        $repository Tag repository
+     * @param \App\Repository\TagRepository             $repository Tag repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -113,8 +112,8 @@ class TagController extends AbstractController
      * Edit action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Tag                      $tag   Tag entity
-     * @param \App\Repository\TagRepository        $repository Tag repository
+     * @param \App\Entity\Tag                           $tag        Tag entity
+     * @param \App\Repository\TagRepository             $repository Tag repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *
@@ -154,8 +153,8 @@ class TagController extends AbstractController
      * Delete action.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
-     * @param \App\Entity\Tag                      $tag   Tag entity
-     * @param \App\Repository\TagRepository        $repository Tag repository
+     * @param \App\Entity\Tag                           $tag        Tag entity
+     * @param \App\Repository\TagRepository             $repository Tag repository
      *
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      *

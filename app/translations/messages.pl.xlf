@@ -26,6 +26,12 @@
                 <source>label.actions</source>
                 <target>Akcje</target>
             </trans-unit>
+            <trans-unit id="label.description">
+                <source>label.description</source>
+                <target>Opis</target>
+            </trans-unit>
+
+
             <trans-unit id="action.view">
                 <source>action.view</source>
                 <target>Pokaż</target>
@@ -106,6 +112,26 @@
                 <source>title.task_edit</source>
                 <target>Edytuj zadanie</target>
             </trans-unit>
+            <trans-unit id="title.note_new">
+                <source>title.note_new</source>
+                <target>Dodaj notatkę</target>
+            </trans-unit>
+            <trans-unit id="title.note_edit">
+                <source>title.note_edit</source>
+                <target>Edytuj notatkę</target>
+            </trans-unit>
+            <trans-unit id="title.note_delete">
+                <source>title.note_delete</source>
+                <target>Usuń notatkę</target>
+            </trans-unit>
+            <trans-unit id="title.note_list">
+                <source>title.note_list</source>
+                <target>Notatki</target>
+            </trans-unit>
+            <trans-unit id="title.user_info">
+                <source>title.user_info</source>
+                <target>Moje konto</target>
+            </trans-unit>
 
             <trans-unit id="label.category">
                 <source>label.category</source>
@@ -178,11 +204,19 @@
             </trans-unit>
             <trans-unit id="action.back_to_list">
                 <source>action.back_to_list</source>
-                <target>Powrót</target>
+                <target>Powrót do listy</target>
             </trans-unit>
             <trans-unit id="action.profile">
                 <source>action.profile</source>
                 <target>Konto</target>
+            </trans-unit>
+            <trans-unit id="action.register">
+                <source>action.register</source>
+                <target>Zarejestruj się</target>
+            </trans-unit>
+            <trans-unit id="action.edit_email">
+                <source>action.edit_email</source>
+                <target>Edytuj email</target>
             </trans-unit>
 
             <trans-unit id="category.task_list">
@@ -225,6 +259,10 @@
             <trans-unit id="message.user_created_successfully">
                 <source>message.user_created_successfully</source>
                 <target>Konto zostało utworzone!</target>
+            </trans-unit>
+            <trans-unit id="message.item_not_found">
+                <source>message.item_not_found</source>
+                <target>Nie znaleziono strony.</target>
             </trans-unit>
 
 

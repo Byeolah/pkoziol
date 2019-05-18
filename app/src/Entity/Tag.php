@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,11 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Tag
 {
-
     /**
      * Use constants to define configuration options that rarely change instead
      * of specifying them in app/config/config.yml.
-     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options
+     * See http://symfony.com/doc/current/best_practices/configuration.html#constants-vs-configuration-options.
      *
      * @constant int NUMBER_OF_ITEMS
      */
@@ -106,7 +104,6 @@ class Tag
      */
     private $tasks;
 
-
     /**
      * @return int|null
      */
@@ -125,6 +122,7 @@ class Tag
 
     /**
      * @param \DateTimeInterface $createdAt
+     *
      * @return Tag
      */
     public function setCreatedAt(\DateTimeInterface $createdAt): self
@@ -144,6 +142,7 @@ class Tag
 
     /**
      * @param \DateTimeInterface $updatedAt
+     *
      * @return Tag
      */
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
@@ -163,6 +162,7 @@ class Tag
 
     /**
      * @param string $title
+     *
      * @return Tag
      */
     public function setTitle(string $title): self
@@ -182,6 +182,7 @@ class Tag
 
     /**
      * @param string $code
+     *
      * @return Tag
      */
     public function setCode(string $code): self
@@ -201,6 +202,7 @@ class Tag
 
     /**
      * @param Task $task
+     *
      * @return Tag
      */
     public function addTask(Task $task): self
@@ -215,6 +217,7 @@ class Tag
 
     /**
      * @param Task $task
+     *
      * @return Tag
      */
     public function removeTask(Task $task): self

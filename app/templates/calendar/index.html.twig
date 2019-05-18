@@ -14,8 +14,7 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 't.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.date'|trans, 't.date') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.event'|trans, 't.event') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 't.createdAt') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.updated_at'|trans, 't.updatedAt') }}</th>
+
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -23,10 +22,9 @@
             {% for calendar in pagination %}
                 <tr>
                     <td>{{ calendar.id }}</td>
-                    <td>{{ calendar.date.date }}</td>
+                    <td>{{ calendar.date.date|date("d/m/Y") }}</td>
                     <td>{{ calendar.event }}</td>
-                    <td>{{ calendar.createdAt|localizeddate }}</td>
-                    <td>{{ calendar.updatedAt|localizeddate }}</td>
+
                     <td>
                         <a href="{{ url('calendar_view', {id: calendar.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}

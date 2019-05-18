@@ -5,11 +5,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -89,7 +90,7 @@ class User implements UserInterface
     /**
      * E-mail.
      *
-     * @var string $email
+     * @var string
      *
      * @ORM\Column(
      *     type="string",
@@ -111,7 +112,6 @@ class User implements UserInterface
      *     min="3",
      *     max="255",
      * )
-     *
      */
     private $password;
 
@@ -134,6 +134,40 @@ class User implements UserInterface
      * )
      */
     private $firstName;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Task", mappedBy="author")
+     */
+    private $tasks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Note", mappedBy="author")
+     */
+    private $notes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Contact", mappedBy="author")
+     */
+    private $contacts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bookmark", mappedBy="author")
+     */
+    private $bookmarks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Calendar", mappedBy="author")
+     */
+    private $calendars;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+        $this->bookmarks = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
+    }
 
     /**
      * Getter for the Id.
@@ -242,7 +276,7 @@ class User implements UserInterface
      *
      * @return array Roles
      */
-    public function getRoles() : array
+    public function getRoles(): array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -296,5 +330,160 @@ class User implements UserInterface
     public function setFirstName(string $firstName): void
     {
         $this->firstName = $firstName;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->contains($task)) {
+            $this->tasks->removeElement($task);
+            // set the owning side to null (unless already changed)
+            if ($task->getAuthor() === $this) {
+                $task->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Note[]
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
+    }
+
+    public function addNote(Note $note): self
+    {
+        if (!$this->notes->contains($note)) {
+            $this->notes[] = $note;
+            $note->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): self
+    {
+        if ($this->notes->contains($note)) {
+            $this->notes->removeElement($note);
+            // set the owning side to null (unless already changed)
+            if ($note->getAuthor() === $this) {
+                $note->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Contact[]
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact): self
+    {
+        if ($this->contacts->contains($contact)) {
+            $this->contacts->removeElement($contact);
+            // set the owning side to null (unless already changed)
+            if ($contact->getAuthor() === $this) {
+                $contact->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bookmark[]
+     */
+    public function getBookmarks(): Collection
+    {
+        return $this->bookmarks;
+    }
+
+    public function addBookmark(Bookmark $bookmark): self
+    {
+        if (!$this->bookmarks->contains($bookmark)) {
+            $this->bookmarks[] = $bookmark;
+            $bookmark->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookmark(Bookmark $bookmark): self
+    {
+        if ($this->bookmarks->contains($bookmark)) {
+            $this->bookmarks->removeElement($bookmark);
+            // set the owning side to null (unless already changed)
+            if ($bookmark->getAuthor() === $this) {
+                $bookmark->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Calendar[]
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): self
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars[] = $calendar;
+            $calendar->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): self
+    {
+        if ($this->calendars->contains($calendar)) {
+            $this->calendars->removeElement($calendar);
+            // set the owning side to null (unless already changed)
+            if ($calendar->getAuthor() === $this) {
+                $calendar->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }

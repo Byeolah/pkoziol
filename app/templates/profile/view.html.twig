@@ -15,8 +15,8 @@
             <dd>{{  user.email }}</dd>
         </dl>
         <button>
-            <a href="{{ url('email_edit', {id: app.user.id}) }}" title="{{ 'edit.email'|trans }}">
-                {{ 'edit.email'|trans }}
+            <a href="{{ url('email_edit', {id: app.user.id}) }}" title="{{ 'action.edit_email'|trans }}">
+                {{ 'action.edit_email'|trans }}
             </a>
         </button>
     {% else %}

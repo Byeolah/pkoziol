@@ -14,8 +14,6 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 't.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 't.title') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.url'|trans, 't.url') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.created_at'|trans, 't.createdAt') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.updated_at'|trans, 't.updatedAt') }}</th>
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -25,8 +23,7 @@
                     <td>{{ bookmark.id }}</td>
                     <td>{{ bookmark.title }}</td>
                     <td>{{ bookmark.url }}</td>
-                    <td>{{ bookmark.createdAt|localizeddate }}</td>
-                    <td>{{ bookmark.updatedAt|localizeddate }}</td>
+
                     <td>
                         <a href="{{ url('bookmark_view', {id: bookmark.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}
