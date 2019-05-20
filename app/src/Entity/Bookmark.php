@@ -252,11 +252,18 @@ class Bookmark
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
+    /**
+     * @param User|null $author
+     * @return Bookmark
+     */
     public function setAuthor(?User $author): self
     {
         $this->author = $author;

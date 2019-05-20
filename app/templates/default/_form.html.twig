@@ -20,7 +20,11 @@
     {% endif %}
     {{ form_widget(form) }}
     <div class="form-group row float-sm-right">
-        <input type="submit" value="{{ submit_label|default('action.save'|trans) }}" class="btn btn-primary" />
+        {% if (page_title|trans)[:4] == 'Usuń' %}
+        <input type="submit" value="{{ submit_label|default('action.delete'|trans) }}" class="btn btn-primary" />
+        {% else %}
+            <input type="submit" value="{{ submit_label|default('action.save'|trans) }}" class="btn btn-primary" />
+        {% endif %}
     </div>
     {% if back_to_list_path|default(false) %}
         <div class="form-group row float-sm-left">

@@ -13,6 +13,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class TagCalendar
 {
     /**
+     * @constant int NUMBER_OF_ITEMS
+     */
+    const NUMBER_OF_ITEMS = 10;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -43,6 +48,9 @@ class TagCalendar
      */
     private $calendars;
 
+    /**
+     * TagCalendar constructor.
+     */
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
@@ -104,6 +112,10 @@ class TagCalendar
         return $this->calendars;
     }
 
+    /**
+     * @param Calendar $calendar
+     * @return TagCalendar
+     */
     public function addCalendar(Calendar $calendar): self
     {
         if (!$this->calendars->contains($calendar)) {
@@ -114,6 +126,10 @@ class TagCalendar
         return $this;
     }
 
+    /**
+     * @param Calendar $calendar
+     * @return TagCalendar
+     */
     public function removeCalendar(Calendar $calendar): self
     {
         if ($this->calendars->contains($calendar)) {

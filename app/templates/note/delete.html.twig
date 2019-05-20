@@ -1,9 +1,9 @@
 {% include 'default/_form.html.twig' with {
-    page_title: 'title.calendar_delete',
-    page_title_param: {'%id%': calendar.id},
+    page_title: 'title.note_delete',
+    page_title_param: {'%id%': note.id},
     attr: {
         method: 'DELETE',
-        action: url('calendar_delete', {'id': calendar.id}),
+        action: url('note_delete', {'id': note.id}),
     },
-    back_to_list_path: 'calendar_index',
+    back_to_list_path: 'note_index',
 } %}

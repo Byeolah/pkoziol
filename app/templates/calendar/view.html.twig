@@ -19,7 +19,7 @@
             <dt>{{ 'label.tags'|trans }}</dt>
             <dd>
                 {% for row in calendar.tags %}
-                    {{ row.title }}
+                    <a href="{{ url('tagcalendar_view', {id: row.id}) }}" title="{{ row.title }}">{{ row.title }}</a>
                     {%- if not loop.last -%}
                         ,
                     {% endif %}

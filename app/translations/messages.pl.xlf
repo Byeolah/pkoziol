@@ -132,6 +132,22 @@
                 <source>title.user_info</source>
                 <target>Moje konto</target>
             </trans-unit>
+            <trans-unit id="title.tagbookmark_list">
+                <source>title.tagbookmark_list</source>
+                <target>Zakładki z tagiem </target>
+            </trans-unit>
+            <trans-unit id="title.tagcalendar_list">
+                <source>title.tagcalendar_list</source>
+                <target>Wydarzenia z tagiem </target>
+            </trans-unit>
+            <trans-unit id="title.tagcontact_list">
+                <source>title.tagcontact_list</source>
+                <target>Kontakty z tagiem </target>
+            </trans-unit>
+            <trans-unit id="title.tagnote_list">
+                <source>title.tagnote_list</source>
+                <target>Notatki z tagiem </target>
+            </trans-unit>
 
             <trans-unit id="label.category">
                 <source>label.category</source>

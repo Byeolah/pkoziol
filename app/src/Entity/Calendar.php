@@ -223,6 +223,10 @@ class Calendar
         return $this->tags;
     }
 
+    /**
+     * @param TagCalendar $tag
+     * @return Calendar
+     */
     public function addTag(TagCalendar $tag): self
     {
         if (!$this->tags->contains($tag)) {
@@ -232,6 +236,10 @@ class Calendar
         return $this;
     }
 
+    /**
+     * @param TagCalendar $tag
+     * @return Calendar
+     */
     public function removeTag(TagCalendar $tag): self
     {
         if ($this->tags->contains($tag)) {
@@ -241,11 +249,18 @@ class Calendar
         return $this;
     }
 
+    /**
+     * @return User|null
+     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
+    /**
+     * @param User|null $author
+     * @return Calendar
+     */
     public function setAuthor(?User $author): self
     {
         $this->author = $author;

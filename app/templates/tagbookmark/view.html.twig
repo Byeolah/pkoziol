@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.tagbookmark_list'|trans ~ tagbookmark.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.tagbookmark_list'|trans ~ tagbookmark.title }}</h1>
+    {% if tagbookmark is defined and tagbookmark|length %}
+        <dl class="dl-horizontal">
+            <dd>
+                {% for row in tagbookmark.bookmarks %}
+                    <td>
+                        <a href="{{ url('bookmark_view', {id: row.id}) }}" title="{{ row.title }}">{{ row.title }}</a>
+                    </td>
+
+                {% endfor %}
+            </dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

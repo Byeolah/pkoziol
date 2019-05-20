@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.tagcalendar_list'|trans ~ tagcalendar.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.tagcalendar_list'|trans ~ tagcalendar.title }}</h1>
+    {% if tagcalendar is defined and tagcalendar|length %}
+        <dl class="dl-horizontal">
+            <dd>
+                {% for row in tagcalendar.calendars %}
+                    <td>
+                        <a href="{{ url('calendar_view', {id: row.id}) }}" title="{{ row.event }}">{{ row.event }}</a>
+                    </td>
+
+                {% endfor %}
+            </dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

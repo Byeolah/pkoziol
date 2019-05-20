@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.tagnote_list'|trans ~ tagnote.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.tagnote_list'|trans ~ tagnote.title }}</h1>
+    {% if tagnote is defined and tagnote|length %}
+        <dl class="dl-horizontal">
+            <dd>
+                {% for row in tagnote.notes %}
+                    <td>
+                        <a href="{{ url('note_view', {id: row.id}) }}" title="{{ row.title }}">{{ row.title }}</a>
+                    </td>
+
+                {% endfor %}
+            </dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

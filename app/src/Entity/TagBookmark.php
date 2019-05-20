@@ -13,6 +13,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class TagBookmark
 {
     /**
+     * @constant int NUMBER_OF_ITEMS
+     */
+    const NUMBER_OF_ITEMS = 10;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -43,6 +48,9 @@ class TagBookmark
      */
     private $bookmarks;
 
+    /**
+     * TagBookmark constructor.
+     */
     public function __construct()
     {
         $this->bookmarks = new ArrayCollection();
@@ -104,6 +112,10 @@ class TagBookmark
         return $this->bookmarks;
     }
 
+    /**
+     * @param Bookmark $bookmark
+     * @return TagBookmark
+     */
     public function addBookmark(Bookmark $bookmark): self
     {
         if (!$this->bookmarks->contains($bookmark)) {
@@ -114,6 +126,10 @@ class TagBookmark
         return $this;
     }
 
+    /**
+     * @param Bookmark $bookmark
+     * @return TagBookmark
+     */
     public function removeBookmark(Bookmark $bookmark): self
     {
         if ($this->bookmarks->contains($bookmark)) {

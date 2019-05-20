@@ -6,16 +6,29 @@
 
 {% block body %}
     <h1>{{ 'mynote.index'|trans }}</h1>
+    <dd>
     {% if is_granted('ROLE_USER') %}
+        <td>
         <a href="{{ url('note_index') }}" title="{{ 'title.note_list'|trans }}">
             {{ 'title.note_list'|trans }}
         </a><br>
+        </td>
+        <td>
         <a href="{{ url('bookmark_index') }}" title="{{ 'title.bookmark_list'|trans }}">
             {{ 'title.bookmark_list'|trans }}
         </a><br>
+        </td>
+        <td>
         <a href="{{ url('calendar_index') }}" title="{{ 'title.calendar_list'|trans }}">
             {{ 'title.calendar_list'|trans }}
-        </a>
+        </a><br>
+        </td>
+        <td>
+        <a href="{{ url('contact_index') }}" title="{{ 'title.contact_list'|trans }}">
+            {{ 'title.contact_list'|trans }}
+        </a><br>
+        </td>
+    </dd>
 
     {% elseif is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
         <h2><a href="{{ url('security_login') }}" title="{{ 'title.login'|trans }}">

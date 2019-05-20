@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'title.tagcontact_list'|trans ~ tagcontact.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.tagcontact_list'|trans ~ tagcontact.title }}</h1>
+    {% if tagcontact is defined and tagcontact|length %}
+        <dl class="dl-horizontal">
+            <dd>
+                {% for row in tagcontact.contacts %}
+                    <td>
+                        <a href="{{ url('contact_view', {id: row.id}) }}" title="{{ row.surname }}">{{ row.name ~ (' ') ~ row.surname }}</a>
+                    </td>
+
+                {% endfor %}
+            </dd>
+        </dl>
+    {% else %}
+        <p>
+            {{ 'message.item_not_found'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

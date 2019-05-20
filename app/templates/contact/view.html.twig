@@ -21,7 +21,7 @@
             <dt>{{ 'label.tags'|trans }}</dt>
             <dd>
                 {% for row in contact.tags %}
-                    {{ row.title }}
+                    <a href="{{ url('tagcontact_view', {id: row.id}) }}" title="{{ row.title }}">{{ row.title }}</a>
                     {%- if not loop.last -%}
                         ,
                     {% endif %}

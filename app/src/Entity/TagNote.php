@@ -13,6 +13,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class TagNote
 {
     /**
+     * @constant int NUMBER_OF_ITEMS
+     */
+    const NUMBER_OF_ITEMS = 10;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")

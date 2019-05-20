@@ -33,7 +33,7 @@ class TagNoteRepository extends ServiceEntityRepository
     public function queryAll(): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder()
-            ->orderBy('t.updatedAt', 'DESC');
+            ->orderBy('t.title', 'DESC');
     }
 
     /**
