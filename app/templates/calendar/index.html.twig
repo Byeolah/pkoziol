@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block body %}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
+
     <h1>{{ 'title.calendar_list'|trans }}</h1>
     {% if pagination is defined and pagination|length %}
 
@@ -14,7 +17,9 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 't.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.date'|trans, 't.date') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.event'|trans, 't.event') }}</th>
-
+                {% if is_granted('ROLE_ADMIN') and currentPath != '/calendar/'%}
+                    <th>{{ knp_pagination_sortable(pagination, 'label.author'|trans, 't.author') }}</th>
+                {% endif %}
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -24,6 +29,9 @@
                     <td>{{ calendar.id }}</td>
                     <td>{{ calendar.date.date|date("d/m/Y") }}</td>
                     <td>{{ calendar.event }}</td>
+                    {% if is_granted('ROLE_ADMIN') and currentPath != '/calendar/'%}
+                        <td>{{ calendar.author.firstName }}</td>
+                    {% endif %}
 
                     <td>
                         <a href="{{ url('calendar_view', {id: calendar.id}) }}" title="{{ 'action.view'|trans }}">
@@ -58,6 +66,13 @@
         <div class="card">
             <a class="btn" href="{{ url('calendar_new') }}" title="{{ 'action.new'|trans }}">
                 {{ 'action.new'|trans }}
+            </a>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') and currentPath != '/calendar/admin'%}
+        <div class="card">
+            <a class="btn" href="{{ url('calendar_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
+                {{ 'action.admin_view'|trans }}
             </a>
         </div>
     {% endif %}

@@ -8,14 +8,14 @@
     <h1>{{ 'title.tagcontact_list'|trans ~ tagcontact.title }}</h1>
     {% if tagcontact is defined and tagcontact|length %}
         <dl class="dl-horizontal">
-            <dd>
+            <ol>
                 {% for row in tagcontact.contacts %}
-                    <td>
+                    <li>
                         <a href="{{ url('contact_view', {id: row.id}) }}" title="{{ row.surname }}">{{ row.name ~ (' ') ~ row.surname }}</a>
-                    </td>
+                    </li>
 
                 {% endfor %}
-            </dd>
+            </ol>
         </dl>
     {% else %}
         <p>

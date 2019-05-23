@@ -65,16 +65,16 @@ class NoteController extends AbstractController
      */
     public function view(Note $note): Response
     {
-        if ($note->getAuthor() !== $this->getUser()) {
+        if ($note->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            return $this->render(
+                'note/view.html.twig',
+                ['note' => $note]
+            );
+        } else {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('note_index');
         }
-
-        return $this->render(
-            'note/view.html.twig',
-            ['note' => $note]
-        );
     }
 
     /**
@@ -136,30 +136,30 @@ class NoteController extends AbstractController
      */
     public function edit(Request $request, Note $note, NoteRepository $repository): Response
     {
-        if ($note->getAuthor() !== $this->getUser()) {
+        if ($note->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(NoteType::class, $note, ['method' => 'PUT']);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $repository->save($note);
+
+                $this->addFlash('success', 'message.updated_successfully');
+
+                return $this->redirectToRoute('note_index');
+            }
+
+            return $this->render(
+                'note/edit.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'note' => $note,
+                ]
+            );
+        } else {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('note_index');
         }
-
-        $form = $this->createForm(NoteType::class, $note, ['method' => 'PUT']);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $repository->save($note);
-
-            $this->addFlash('success', 'message.updated_successfully');
-
-            return $this->redirectToRoute('note_index');
-        }
-
-        return $this->render(
-            'note/edit.html.twig',
-            [
-                'form' => $form->createView(),
-                'note' => $note,
-            ]
-        );
     }
 
     /**
@@ -183,32 +183,65 @@ class NoteController extends AbstractController
      */
     public function delete(Request $request, Note $note, NoteRepository $repository): Response
     {
-        if ($note->getAuthor() !== $this->getUser()) {
+        if ($note->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(FormType::class, $note, ['method' => 'DELETE']);
+            $form->handleRequest($request);
+
+            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+                $form->submit($request->request->get($form->getName()));
+            }
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $repository->delete($note);
+                $this->addFlash('success', 'message.deleted_successfully');
+
+                return $this->redirectToRoute('note_index');
+            }
+
+            return $this->render(
+                'note/delete.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'note' => $note,
+                ]
+            );
+        } else {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('note_index');
         }
+    }
 
-        $form = $this->createForm(FormType::class, $note, ['method' => 'DELETE']);
-        $form->handleRequest($request);
+    /**
+     * Index Admin action.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
+     * @param \App\Repository\NoteRepository        $repository Repository
+     * @param \Knp\Component\Pager\PaginatorInterface   $paginator  Paginator
+     *
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     *
+     * @Route(
+     *     "/admin",
+     *     name="note_index_admin",
+     * )
+     */
+    public function index_admin(Request $request, NoteRepository $repository, PaginatorInterface $paginator): Response
+    {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $pagination = $paginator->paginate(
+                $repository->queryAll(),
+                $request->query->getInt('page', 1),
+                Note::NUMBER_OF_ITEMS
+            );
 
-        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-            $form->submit($request->request->get($form->getName()));
+            return $this->render(
+                'note/index.html.twig',
+                ['pagination' => $pagination]
+            );
         }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $repository->delete($note);
-            $this->addFlash('success', 'message.deleted_successfully');
-
+        else {
             return $this->redirectToRoute('note_index');
         }
-
-        return $this->render(
-            'note/delete.html.twig',
-            [
-                'form' => $form->createView(),
-                'note' => $note,
-            ]
-        );
     }
 }

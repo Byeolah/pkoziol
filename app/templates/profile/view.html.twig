@@ -8,20 +8,52 @@
     <h1>{{ 'title.user_info'|trans }}</h1>
     {% if user is defined and user|length %}
         <dl class="dl-horizontal">
-
+            <dt>{{ 'label.id'|trans }}</dt>
+            <dd>{{ user.id }}</dd>
             <dt>{{ 'label.created_at'|trans }}</dt>
             <dd>{{ user.createdAt|localizeddate }}</dd>
             <dt>{{ 'label.email'|trans }}</dt>
-            <dd>{{  user.email }}</dd>
+            <dd>{{  user.email }}
+                <button>
+                    <a href="{{ url('email_edit', {id: user.id}) }}" title="{{ 'action.edit_email'|trans }}">
+                        {{ 'action.edit_email'|trans }}
+                    </a>
+                </button>
+            </dd>
+            <dt>{{ 'label.password'|trans }}</dt>
+            <dd>
+                <button>
+                    <a href="{{ url('password_edit', {id: user.id}) }}" title="{{ 'action.edit_password'|trans }}">
+                        {{ 'action.edit_password'|trans }}
+                    </a>
+                </button>
+            </dd>
+            {% if user.id != app.user.id %}
+            <dt>{{ 'label.change_role'|trans }}</dt>
+            <dd>
+
+                <br>
+                <button>
+                    <a href="{{ url('role_edit', {id: user.id}) }}" title="{{ 'action.edit_role'|trans }}">
+                        {{ 'action.edit_role'|trans }}
+                    </a>
+                </button>
+            </dd>
+            {% endif %}
         </dl>
-        <button>
-            <a href="{{ url('email_edit', {id: app.user.id}) }}" title="{{ 'action.edit_email'|trans }}">
-                {{ 'action.edit_email'|trans }}
-            </a>
-        </button>
+
     {% else %}
         <p>
             {{ 'message.item_not_found'|trans }}
         </p>
     {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn" href="{{ url('admin_user_index') }}" title="{{ 'action.back_to_list'|trans }}">
+            {{ 'action.back_to_list'|trans }}
+        </a>
+    {% endif %}
+
+    <a class="btn" href="{{ url('profile_delete',{id: user.id}) }}" title="{{ 'action.delete'|trans }}">
+        {{ 'action.delete'|trans }}
+    </a>
 {% endblock %}

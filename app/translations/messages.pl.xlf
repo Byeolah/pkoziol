@@ -130,7 +130,7 @@
             </trans-unit>
             <trans-unit id="title.user_info">
                 <source>title.user_info</source>
-                <target>Moje konto</target>
+                <target>Konto użytkownika</target>
             </trans-unit>
             <trans-unit id="title.tagbookmark_list">
                 <source>title.tagbookmark_list</source>
@@ -148,7 +148,27 @@
                 <source>title.tagnote_list</source>
                 <target>Notatki z tagiem </target>
             </trans-unit>
+            <trans-unit id="title.hello">
+                <source>title.hello</source>
+                <target>Cześć </target>
+            </trans-unit>
+            <trans-unit id="title.admin_panel">
+                <source>title.admin_panel</source>
+                <target>Panel administracyjny</target>
+            </trans-unit>
+            <trans-unit id="title.user_list">
+                <source>title.user_list</source>
+                <target>Panel administracyjny</target>
+            </trans-unit>
+            <trans-unit id="title.profile_delete">
+                <source>title.profile_delete</source>
+                <target>Usuń konto</target>
+            </trans-unit>
 
+            <trans-unit id="label.change_role">
+                <source>label.change_role</source>
+                <target>Zmień rolę</target>
+            </trans-unit>
             <trans-unit id="label.category">
                 <source>label.category</source>
                 <target>Kategoria</target>
@@ -193,6 +213,14 @@
                 <source>label.event</source>
                 <target>Wydarzenie</target>
             </trans-unit>
+            <trans-unit id="label.author">
+                <source>label.author</source>
+                <target>Autor</target>
+            </trans-unit>
+            <trans-unit id="label.role">
+                <source>label.role</source>
+                <target>Obecna rola: </target>
+            </trans-unit>
 
             <trans-unit id="action.save">
                 <source>action.save</source>
@@ -233,6 +261,22 @@
             <trans-unit id="action.edit_email">
                 <source>action.edit_email</source>
                 <target>Edytuj email</target>
+            </trans-unit>
+            <trans-unit id="action.edit_password">
+                <source>action.edit_password</source>
+                <target>Zmień hasło</target>
+            </trans-unit>
+            <trans-unit id="action.admin_view">
+                <source>action.admin_view</source>
+                <target>Widok admina</target>
+            </trans-unit>
+            <trans-unit id="action.admin">
+                <source>action.admin</source>
+                <target>Administracja</target>
+            </trans-unit>
+            <trans-unit id="action.edit_role">
+                <source>action.edit_role</source>
+                <target>Zmień rolę</target>
             </trans-unit>
 
             <trans-unit id="category.task_list">

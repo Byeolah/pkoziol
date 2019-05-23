@@ -23,11 +23,15 @@
         <ul>
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <li><a href="{{ url('security_logout') }}">{{ 'action.logout'|trans }}</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ url('admin_index') }}">{{ 'action.admin'|trans }}</a></li>
+                {% endif %}
                 <li><a href="{{ url('profile_view', {id: app.user.id}) }}">{{ 'action.profile'|trans }}</a></li>
                 <li><a href="{{ url('calendar_index') }}">{{ 'title.calendar_list'|trans }}</a></li>
                 <li><a href="{{ url('bookmark_index') }}">{{ 'title.bookmark_list'|trans }}</a></li>
                 <li><a href="{{ url('contact_index') }}">{{ 'title.contact_list'|trans }}</a></li>
                 <li><a href="{{ url('note_index') }}">{{ 'title.note_list'|trans }}</a></li>
+                <li><a>{{ 'title.hello'|trans ~ app.user.firstName }}</a></li>
 
             {% else %}
                 <li>

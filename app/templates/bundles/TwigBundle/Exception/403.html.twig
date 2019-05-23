@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    {{ 'access.denied'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {{ 'access.denied'|trans }}
+    </h1>
+
+    <a href="{{ url('question_index') }}" title="{{ 'label.back_to_list'|trans }}">
+        {{ 'label.back_to_list'|trans }}
+    </a>
+
+{% endblock %}

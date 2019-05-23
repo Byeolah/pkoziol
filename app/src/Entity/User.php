@@ -32,6 +32,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
     /**
+     * @constant int NUMBER_OF_ITEMS
+     */
+    const NUMBER_OF_ITEMS = 10;
+
+    /**
      * Role user.
      *
      * @var string
@@ -160,6 +165,9 @@ class User implements UserInterface
      */
     private $calendars;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->tasks = new ArrayCollection();

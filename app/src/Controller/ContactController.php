@@ -65,16 +65,16 @@ class ContactController extends AbstractController
      */
     public function view(Contact $contact): Response
     {
-        if ($contact->getAuthor() !== $this->getUser()) {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('contact_index');
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') or $contact->getAuthor() == $this->getUser()) {
+            return $this->render(
+                'contact/view.html.twig',
+                ['contact' => $contact]
+            );
         }
 
-        return $this->render(
-            'contact/view.html.twig',
-            ['contact' => $contact]
-        );
+        $this->addFlash('warning', 'message.item_not_found');
+
+        return $this->redirectToRoute('contact_index');
     }
 
     /**
@@ -136,30 +136,30 @@ class ContactController extends AbstractController
      */
     public function edit(Request $request, Contact $contact, ContactRepository $repository): Response
     {
-        if ($contact->getAuthor() !== $this->getUser()) {
+        if ($contact->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(ContactType::class, $contact, ['method' => 'PUT']);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $repository->save($contact);
+
+                $this->addFlash('success', 'message.updated_successfully');
+
+                return $this->redirectToRoute('contact_index');
+            }
+
+            return $this->render(
+                'contact/edit.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'contact' => $contact,
+                ]
+            );
+        } else {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('contact_index');
         }
-
-        $form = $this->createForm(ContactType::class, $contact, ['method' => 'PUT']);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $repository->save($contact);
-
-            $this->addFlash('success', 'message.updated_successfully');
-
-            return $this->redirectToRoute('contact_index');
-        }
-
-        return $this->render(
-            'contact/edit.html.twig',
-            [
-                'form' => $form->createView(),
-                'contact' => $contact,
-            ]
-        );
     }
 
     /**
@@ -183,32 +183,65 @@ class ContactController extends AbstractController
      */
     public function delete(Request $request, Contact $contact, ContactRepository $repository): Response
     {
-        if ($contact->getAuthor() !== $this->getUser()) {
+        if ($contact->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $form = $this->createForm(FormType::class, $contact, ['method' => 'DELETE']);
+            $form->handleRequest($request);
+
+            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+                $form->submit($request->request->get($form->getName()));
+            }
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $repository->delete($contact);
+                $this->addFlash('success', 'message.deleted_successfully');
+
+                return $this->redirectToRoute('contact_index');
+            }
+
+            return $this->render(
+                'contact/delete.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'contact' => $contact,
+                ]
+            );
+        } else {
             $this->addFlash('warning', 'message.item_not_found');
 
             return $this->redirectToRoute('contact_index');
         }
+    }
 
-        $form = $this->createForm(FormType::class, $contact, ['method' => 'DELETE']);
-        $form->handleRequest($request);
+    /**
+     * Index Admin action.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
+     * @param \App\Repository\ContactRepository        $repository Repository
+     * @param \Knp\Component\Pager\PaginatorInterface   $paginator  Paginator
+     *
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     *
+     * @Route(
+     *     "/admin",
+     *     name="contact_index_admin",
+     * )
+     */
+    public function index_admin(Request $request, ContactRepository $repository, PaginatorInterface $paginator): Response
+    {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            $pagination = $paginator->paginate(
+                $repository->queryAll(),
+                $request->query->getInt('page', 1),
+                Contact::NUMBER_OF_ITEMS
+            );
 
-        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-            $form->submit($request->request->get($form->getName()));
+            return $this->render(
+                'contact/index.html.twig',
+                ['pagination' => $pagination]
+            );
         }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $repository->delete($contact);
-            $this->addFlash('success', 'message.deleted_successfully');
-
+        else {
             return $this->redirectToRoute('contact_index');
         }
-
-        return $this->render(
-            'contact/delete.html.twig',
-            [
-                'form' => $form->createView(),
-                'contact' => $contact,
-            ]
-        );
     }
 }

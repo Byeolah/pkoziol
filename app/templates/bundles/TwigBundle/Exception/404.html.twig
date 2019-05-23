@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    {{ 'error.notfound'|trans }}
+{% endblock %}
+
+{% block body %}
+    <h1>
+        {{ 'error.notfound'|trans }}
+    </h1>
+
+    <a href="{{ url('base_index') }}" title="{{ 'label.back_to_list'|trans }}">
+        {{ 'label.back_to_list'|trans }}
+    </a>
+
+{% endblock %}

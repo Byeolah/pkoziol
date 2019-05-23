@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block body %}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
     <h1>{{ 'title.note_list'|trans }}</h1>
     {% if pagination is defined and pagination|length %}
 
@@ -14,6 +16,9 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 't.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 't.date') }}</th>
                 <th>{{ 'label.description'|trans }}</th>
+                {% if is_granted('ROLE_ADMIN') and currentPath != '/note/'%}
+                    <th>{{ knp_pagination_sortable(pagination, 'label.author'|trans, 't.author') }}</th>
+                {% endif %}
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -23,6 +28,9 @@
                     <td>{{ note.id }}</td>
                     <td>{{ note.title }}</td>
                     <td>{{ note.description }}</td>
+                    {% if is_granted('ROLE_ADMIN') and currentPath != '/note/'%}
+                        <td>{{ note.author.firstName }}</td>
+                    {% endif %}
 
                     <td>
                         <a href="{{ url('note_view', {id: note.id}) }}" title="{{ 'action.view'|trans }}">
@@ -57,6 +65,13 @@
         <div class="card">
             <a class="btn" href="{{ url('note_new') }}" title="{{ 'action.new'|trans }}">
                 {{ 'action.new'|trans }}
+            </a>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') and currentPath != '/note/admin' %}
+        <div class="card">
+            <a class="btn" href="{{ url('note_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
+                {{ 'action.admin_view'|trans }}
             </a>
         </div>
     {% endif %}

@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block body %}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
+
     <h1>{{ 'title.contact_list'|trans }}</h1>
     {% if pagination is defined and pagination|length %}
 
@@ -15,6 +18,9 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.name'|trans, 't.name') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.surname'|trans, 't.surname') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.phone'|trans, 't.phone') }}</th>
+                {% if is_granted('ROLE_ADMIN') and currentPath != '/contact/'%}
+                    <th>{{ knp_pagination_sortable(pagination, 'label.author'|trans, 't.author') }}</th>
+                {% endif %}
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
@@ -25,6 +31,9 @@
                     <td>{{ contact.name }}</td>
                     <td>{{ contact.surname }}</td>
                     <td>{{ contact.phone }}</td>
+                    {% if is_granted('ROLE_ADMIN') and currentPath != '/contact/'%}
+                        <td>{{ contact.author.firstName }}</td>
+                    {% endif %}
                     <td>
                         <a href="{{ url('contact_view', {id: contact.id}) }}" title="{{ 'action.view'|trans }}">
                             {{ 'action.view'|trans }}
@@ -58,6 +67,13 @@
         <div class="card">
             <a class="btn" href="{{ url('contact_new') }}" title="{{ 'action.new'|trans }}">
                 {{ 'action.new'|trans }}
+            </a>
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') and currentPath != '/contact/admin'%}
+        <div class="card">
+            <a class="btn" href="{{ url('contact_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
+                {{ 'action.admin_view'|trans }}
             </a>
         </div>
     {% endif %}

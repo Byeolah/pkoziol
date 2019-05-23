@@ -36,7 +36,7 @@ class CalendarRepository extends ServiceEntityRepository
     public function queryAll(): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder()
-            ->orderBy('t.updatedAt', 'DESC');
+            ->orderBy('t.author', 'ASC');
     }
 
     /**
