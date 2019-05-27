@@ -28,7 +28,7 @@
     </div>
     {% if back_to_list_path|default(false) %}
         <div class="form-group row float-sm-left">
-            <a href="{{ url(back_to_list_path) }}" class="btn btn-link">
+            <a href="{{ url(back_to_list_path, {id: app.user.id}) }}" class="btn btn-link">
                 {{ 'action.back_to_list'|trans }}
             </a>
         </div>

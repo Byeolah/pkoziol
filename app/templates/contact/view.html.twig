@@ -27,6 +27,10 @@
                     {% endif %}
                 {% endfor %}
             </dd>
+            {% if is_granted('ROLE_ADMIN') %}
+                <dt>{{ 'label.author'|trans }}</dt>
+                <dd>{{ contact.author.firstName }}</dd>
+            {% endif %}
         </dl>
     {% else %}
         <p>

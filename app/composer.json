@@ -59,10 +59,6 @@
         "post-update-cmd": [
             "@auto-scripts",
             "@phpcs-scripts"
-        ],
-        "phpcs-scripts": [
-            "vendor/bin/phpcs --config-set installed_paths $(realpath vendor/escapestudios/symfony2-coding-standard)",
-            "vendor/bin/phpcs --config-set default_standard Symfony"
         ]
     },
     "conflict": {

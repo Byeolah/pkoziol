@@ -158,11 +158,31 @@
             </trans-unit>
             <trans-unit id="title.user_list">
                 <source>title.user_list</source>
-                <target>Panel administracyjny</target>
+                <target>Lista użytkowników</target>
             </trans-unit>
             <trans-unit id="title.profile_delete">
                 <source>title.profile_delete</source>
                 <target>Usuń konto</target>
+            </trans-unit>
+            <trans-unit id="title.role_change">
+                <source>title.role_change</source>
+                <target>Zmień rolę użytkownika</target>
+            </trans-unit>
+            <trans-unit id="tagbookmark.tagbookmark_list">
+                <source>tagbookmark.tagbookmark_list</source>
+                <target>Tagi zakładek</target>
+            </trans-unit>
+            <trans-unit id="tagbookmark.tagcalendar_list">
+                <source>tagbookmark.tagcalendar_list</source>
+                <target>Tagi kalendarza</target>
+            </trans-unit>
+            <trans-unit id="tagbookmark.tagcontact_list">
+                <source>tagbookmark.tagcontact_list</source>
+                <target>Tagi kontaktów</target>
+            </trans-unit>
+            <trans-unit id="tagbookmark.tagnote_list">
+                <source>tagbookmark.tagnote_list</source>
+                <target>Tagi notatek</target>
             </trans-unit>
 
             <trans-unit id="label.change_role">
@@ -248,7 +268,7 @@
             </trans-unit>
             <trans-unit id="action.back_to_list">
                 <source>action.back_to_list</source>
-                <target>Powrót do listy</target>
+                <target>Powrót</target>
             </trans-unit>
             <trans-unit id="action.profile">
                 <source>action.profile</source>
@@ -277,6 +297,18 @@
             <trans-unit id="action.edit_role">
                 <source>action.edit_role</source>
                 <target>Zmień rolę</target>
+            </trans-unit>
+            <trans-unit id="action.user_view">
+                <source>action.user_view</source>
+                <target>Widok użytkownika</target>
+            </trans-unit>
+            <trans-unit id="action.users_list">
+                <source>action.users_list</source>
+                <target>Lista użytkowników</target>
+            </trans-unit>
+            <trans-unit id="action.edit_name">
+                <source>action.edit_name</source>
+                <target>Zmień imię</target>
             </trans-unit>
 
             <trans-unit id="category.task_list">
@@ -323,6 +355,15 @@
             <trans-unit id="message.item_not_found">
                 <source>message.item_not_found</source>
                 <target>Nie znaleziono strony.</target>
+            </trans-unit>
+
+            <trans-unit id="ROLE_USER">
+                <source>ROLE_USER</source>
+                <target>użytkownik</target>
+            </trans-unit>
+            <trans-unit id="ROLE_ADMIN">
+                <source>ROLE_ADMIN</source>
+                <target>administrator</target>
             </trans-unit>
 
 

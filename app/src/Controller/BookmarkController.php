@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class BookmarkController.
@@ -62,19 +63,18 @@ class BookmarkController extends AbstractController
      *     name="bookmark_view",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="bookmark",
+     * )
      */
     public function view(Bookmark $bookmark): Response
     {
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') or $bookmark->getAuthor() == $this->getUser()) {
-            return $this->render(
-                'bookmark/view.html.twig',
-                ['bookmark' => $bookmark]
-            );
-        }
-
-        $this->addFlash('warning', 'message.item_not_found');
-
-        return $this->redirectToRoute('bookmark_index');
+        return $this->render(
+            'bookmark/view.html.twig',
+            ['bookmark' => $bookmark]
+        );
     }
 
     /**
@@ -133,33 +133,28 @@ class BookmarkController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="bookmark_edit",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="bookmark",
+     * )
      */
     public function edit(Request $request, Bookmark $bookmark, BookmarkRepository $repository): Response
     {
-        if ($bookmark->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(BookmarkType::class, $bookmark, ['method' => 'PUT']);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->save($bookmark);
-
-                $this->addFlash('success', 'message.updated_successfully');
-
-                return $this->redirectToRoute('bookmark_index');
-            }
-
-            return $this->render(
-                'bookmark/edit.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'bookmark' => $bookmark,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
+        $form = $this->createForm(BookmarkType::class, $bookmark, ['method' => 'PUT']);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->save($bookmark);
+            $this->addFlash('success', 'message.updated_successfully');
             return $this->redirectToRoute('bookmark_index');
         }
+        return $this->render(
+            'bookmark/edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'bookmark' => $bookmark,
+            ]
+        );
     }
 
 
@@ -181,36 +176,34 @@ class BookmarkController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="bookmark_delete",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="bookmark",
+     * )
      */
     public function delete(Request $request, Bookmark $bookmark, BookmarkRepository $repository): Response
     {
-        if ($bookmark->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(FormType::class, $bookmark, ['method' => 'DELETE']);
-            $form->handleRequest($request);
-
-            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-                $form->submit($request->request->get($form->getName()));
+        $form = $this->createForm(FormType::class, $bookmark, ['method' => 'DELETE']);
+        $form->handleRequest($request);
+        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+            $form->submit($request->request->get($form->getName()));
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($bookmark->getTags() as $tag) {
+                $bookmark->removeTag($tag);
             }
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->delete($bookmark);
-                $this->addFlash('success', 'message.deleted_successfully');
-
-                return $this->redirectToRoute('bookmark_index');
-            }
-
-            return $this->render(
-                'bookmark/delete.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'bookmark' => $bookmark,
-                ]
-            );
-        } else{
-            $this->addFlash('warning', 'message.item_not_found');
-
+            $repository->delete($bookmark);
+            $this->addFlash('success', 'message.deleted_successfully');
             return $this->redirectToRoute('bookmark_index');
         }
+        return $this->render(
+            'bookmark/delete.html.twig',
+            [
+                'form' => $form->createView(),
+                'bookmark' => $bookmark,
+            ]
+        );
     }
 
 

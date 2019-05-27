@@ -10,10 +10,11 @@
         <dl class="dl-horizontal">
             <ol>
                 {% for row in tagcontact.contacts %}
-                    <li>
-                        <a href="{{ url('contact_view', {id: row.id}) }}" title="{{ row.surname }}">{{ row.name ~ (' ') ~ row.surname }}</a>
-                    </li>
-
+                    {% if row.author.id == app.user.id or is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a href="{{ url('contact_view', {id: row.id}) }}" title="{{ row.surname }}">{{ row.name ~ (' ') ~ row.surname }}</a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ol>
         </dl>

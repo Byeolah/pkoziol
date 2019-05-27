@@ -18,7 +18,7 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 't.title') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.url'|trans, 't.url') }}</th>
                 {% if is_granted('ROLE_ADMIN') and currentPath != '/bookmark/'%}
-                    <th>{{ knp_pagination_sortable(pagination, 'label.author'|trans, 't.author') }}</th>
+                    <th>{{ 'label.author'|trans }}</th>
                 {% endif %}
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
@@ -49,11 +49,6 @@
             </tbody>
         </table>
 
-        <div class="card">
-        <a class="btn" href="{{ url('bookmark_new') }}" title="{{ 'action.new'|trans }}">
-            {{ 'action.new'|trans }}
-        </a>
-        </div>
 
         <div class="navigation text-center">
             {{ knp_pagination_render(pagination) }}
@@ -63,18 +58,25 @@
         <p>
             {{ 'message.empty_list'|trans }}
         </p>
-        <div class="card">
-            <a class="btn" href="{{ url('bookmark_new') }}" title="{{ 'action.new'|trans }}">
-                {{ 'action.new'|trans }}
-            </a>
-        </div>
-    {% endif %}
-    {% if is_granted('ROLE_ADMIN') and currentPath != '/bookmark/admin' %}
-        <div class="card">
-            <a class="btn" href="{{ url('bookmark_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
-                {{ 'action.admin_view'|trans }}
-            </a>
-        </div>
     {% endif %}
 
+    {% if currentPath != '/bookmark/admin' %}
+    <div class="card">
+        <a class="btn" href="{{ url('bookmark_new') }}" title="{{ 'action.new'|trans }}">
+            {{ 'action.new'|trans }}
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="card">
+        {% if is_granted('ROLE_ADMIN') and currentPath == '/bookmark/admin' %}
+        <a class="btn" href="{{ url('bookmark_index') }}" title="{{ 'action.user_view'|trans }}">
+            {{ 'action.user_view'|trans }}
+        </a>
+        {% elseif is_granted('ROLE_ADMIN') %}
+        <a class="btn" href="{{ url('bookmark_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
+            {{ 'action.admin_view'|trans }}
+        </a>
+        {% endif %}
+    </div>
 {% endblock %}

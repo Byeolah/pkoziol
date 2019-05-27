@@ -36,6 +36,8 @@ class TagCalendarController extends AbstractController
      */
     public function index(Request $request, TagCalendarRepository $repository, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
         $pagination = $paginator->paginate(
             $repository->queryAll(),
             $request->query->getInt('page', 1),

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 /**
  * Class TagContactController.
  *
@@ -33,9 +34,12 @@ class TagContactController extends AbstractController
      *     "/",
      *     name="tagcontact_index",
      * )
+     *
      */
     public function index(Request $request, TagContactRepository $repository, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+
         $pagination = $paginator->paginate(
             $repository->queryAll(),
             $request->query->getInt('page', 1),
@@ -60,9 +64,11 @@ class TagContactController extends AbstractController
      *     name="tagcontact_view",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
      */
     public function view(TagContact $tagcontact): Response
     {
+
         return $this->render(
             'tagcontact/view.html.twig',
             ['tagcontact' => $tagcontact]

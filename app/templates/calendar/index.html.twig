@@ -18,7 +18,7 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.date'|trans, 't.date') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.event'|trans, 't.event') }}</th>
                 {% if is_granted('ROLE_ADMIN') and currentPath != '/calendar/'%}
-                    <th>{{ knp_pagination_sortable(pagination, 'label.author'|trans, 't.author') }}</th>
+                    <th>{{ 'label.author'|trans }}</th>
                 {% endif %}
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
@@ -49,12 +49,6 @@
             </tbody>
         </table>
 
-        <div class="card">
-        <a class="btn" href="{{ url('calendar_new') }}" title="{{ 'action.new'|trans }}">
-            {{ 'action.new'|trans }}
-        </a>
-        </div>
-
         <div class="navigation text-center">
             {{ knp_pagination_render(pagination) }}
         </div>
@@ -63,18 +57,26 @@
         <p>
             {{ 'message.empty_list'|trans }}
         </p>
+    {% endif %}
+
+    {% if currentPath != '/calenda/admin' %}
         <div class="card">
             <a class="btn" href="{{ url('calendar_new') }}" title="{{ 'action.new'|trans }}">
                 {{ 'action.new'|trans }}
             </a>
         </div>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') and currentPath != '/calendar/admin'%}
-        <div class="card">
+
+    <div class="card">
+        {% if is_granted('ROLE_ADMIN') and currentPath == '/calenda/admin' %}
+            <a class="btn" href="{{ url('calenda_index') }}" title="{{ 'action.user_view'|trans }}">
+                {{ 'action.user_view'|trans }}
+            </a>
+        {% elseif is_granted('ROLE_ADMIN') %}
             <a class="btn" href="{{ url('calendar_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
                 {{ 'action.admin_view'|trans }}
             </a>
-        </div>
-    {% endif %}
-
+        {% endif %}
+    </div>
 {% endblock %}
+    

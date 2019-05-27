@@ -18,13 +18,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Form\FirstNameType;
 
 /**
- * Class ProfileController.
+ * Class UserController.
  *
  * @Route("/profile")
  */
-class ProfileController extends AbstractController
+class UserController extends AbstractController
 {
     /**
      * View action.
@@ -38,19 +40,18 @@ class ProfileController extends AbstractController
      *     name="profile_view",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="user",
+     * )
      */
     public function view(User $user): Response
     {
-        if ($user->getId() == $this->getUser()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            return $this->render(
-                'profile/view.html.twig',
-                ['user' => $user]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('profile_view', array('id' => $this->getUser()->getId()));
-        }
+        return $this->render(
+            'profile/view.html.twig',
+            ['user' => $user]
+        );
     }
 
     /**
@@ -117,33 +118,32 @@ class ProfileController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="email_edit",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="user",
+     * )
      */
     public function edit(Request $request, User $user, UserRepository $repository): Response
     {
-        if ($user->getId() == $this->getUser()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(EmailType::class, $user, ['method' => 'PUT']);
-            $form->handleRequest($request);
+        $form = $this->createForm(EmailType::class, $user, ['method' => 'PUT']);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->save($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->save($user);
 
-                $this->addFlash('success', 'message.updated_successfully');
+            $this->addFlash('success', 'message.updated_successfully');
 
-                return $this->redirectToRoute('profile_view', array('id' => $user->getId()));
-            }
-
-            return $this->render(
-                'profile/edit_email.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'profile' => $user,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('profile_view', array('id' => $this->getUser()->getId()));
+            return $this->redirectToRoute('profile_view', array('id' => $user->getId()));
         }
+
+        return $this->render(
+            'profile/edit_email.html.twig',
+            [
+                'form' => $form->createView(),
+                'profile' => $user,
+            ]
+        );
     }
 
     /**
@@ -164,41 +164,38 @@ class ProfileController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="password_edit",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="user",
+     * )
      */
     public function edit_pass(Request $request, User $user,  UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository): Response
     {
-        dump($this->getUser());
-        if ($user->getId() == $this->getUser()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(PassType::class, $user, ['method' => 'PUT']);
-            $form->handleRequest($request);
+        $form = $this->createForm(PassType::class, $user, ['method' => 'PUT']);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
                     $form->get('password')->getData()
                 )
             );
+            $repository->save($user);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->save($user);
-
-                $this->addFlash('success', 'message.updated_successfully');
-
-                return $this->redirectToRoute('profile_view', array('id' => $this->getUser()->getId()));
-            }
-
-            return $this->render(
-                'profile/edit_password.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'profile' => $user,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
+            $this->addFlash('success', 'message.updated_successfully');
 
             return $this->redirectToRoute('profile_view', array('id' => $this->getUser()->getId()));
         }
+
+        return $this->render(
+            'profile/edit_password.html.twig',
+            [
+                'form' => $form->createView(),
+                'profile' => $user,
+            ]
+        );
     }
 
     /**
@@ -237,7 +234,7 @@ class ProfileController extends AbstractController
 
                 $this->addFlash('success', 'message.updated_successfully');
 
-                return $this->redirectToRoute('admin_user_index');
+                return $this->redirectToRoute('profile_view', array('id' => $user->getId()));
             }
 
             return $this->render(
@@ -252,6 +249,52 @@ class ProfileController extends AbstractController
 
             return $this->redirectToRoute('profile_view', array('id' => $this->getUser()->getId()));
         }
+    }
+
+    /**
+     * Edit First Name.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request    HTTP request
+     * @param \App\Entity\User                          $user       User entity
+     * @param \App\Repository\UserRepository            $repository User repository
+     *
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @Route(
+     *     "/{id}/edit_firstname",
+     *     methods={"GET", "PUT"},
+     *     requirements={"id": "[1-9]\d*"},
+     *     name="firstname_edit",
+     * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="user",
+     * )
+     */
+    public function edit_firstname(Request $request, User $user, UserRepository $repository): Response
+    {
+        $form = $this->createForm(FirstNameType::class, $user, ['method' => 'PUT']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->save($user);
+
+            $this->addFlash('success', 'message.updated_successfully');
+
+            return $this->redirectToRoute('profile_view', array('id' => $user->getId()));
+        }
+
+        return $this->render(
+            'profile/edit_name.html.twig',
+            [
+                'form' => $form->createView(),
+                'profile' => $user,
+            ]
+        );
     }
 
     /**
@@ -272,35 +315,38 @@ class ProfileController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="profile_delete",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="user",
+     * )
      */
     public function delete(Request $request, User $user, UserRepository $repository): Response
     {
-        if ($user->getId() == $this->getUser()->getId() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(FormType::class, $user, ['method' => 'DELETE']);
-            $form->handleRequest($request);
+        $form = $this->createForm(FormType::class, $user, ['method' => 'DELETE']);
+        $form->handleRequest($request);
 
-            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-                $form->submit($request->request->get($form->getName()));
-            }
+        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+            $form->submit($request->request->get($form->getName()));
+        }
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->delete($user);
-                $this->addFlash('success', 'message.deleted_successfully');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->delete($user);
+            $this->addFlash('success', 'message.deleted_successfully');
 
+            if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('admin_user_index');
+            } else {
                 return $this->redirectToRoute('security_login');
             }
-
-            return $this->render(
-                'profile/delete.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'user' => $user,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('profile_view', array('id' => $this->getUser()->getId()));
         }
+
+        return $this->render(
+            'profile/delete.html.twig',
+            [
+                'form' => $form->createView(),
+                'user' => $user,
+            ]
+        );
     }
 }

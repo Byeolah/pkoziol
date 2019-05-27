@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class NoteController.
@@ -62,19 +63,18 @@ class NoteController extends AbstractController
      *     name="note_view",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="note",
+     * )
      */
     public function view(Note $note): Response
     {
-        if ($note->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            return $this->render(
-                'note/view.html.twig',
-                ['note' => $note]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
-            return $this->redirectToRoute('note_index');
-        }
+        return $this->render(
+            'note/view.html.twig',
+            ['note' => $note]
+        );
     }
 
     /**
@@ -133,33 +133,28 @@ class NoteController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="note_edit",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="note",
+     * )
      */
     public function edit(Request $request, Note $note, NoteRepository $repository): Response
     {
-        if ($note->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(NoteType::class, $note, ['method' => 'PUT']);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->save($note);
-
-                $this->addFlash('success', 'message.updated_successfully');
-
-                return $this->redirectToRoute('note_index');
-            }
-
-            return $this->render(
-                'note/edit.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'note' => $note,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
+        $form = $this->createForm(NoteType::class, $note, ['method' => 'PUT']);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->save($note);
+            $this->addFlash('success', 'message.updated_successfully');
             return $this->redirectToRoute('note_index');
         }
+        return $this->render(
+            'note/edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'note' => $note,
+            ]
+        );
     }
 
     /**
@@ -180,36 +175,34 @@ class NoteController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="note_delete",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="note",
+     * )
      */
     public function delete(Request $request, Note $note, NoteRepository $repository): Response
     {
-        if ($note->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(FormType::class, $note, ['method' => 'DELETE']);
-            $form->handleRequest($request);
-
-            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-                $form->submit($request->request->get($form->getName()));
+        $form = $this->createForm(FormType::class, $note, ['method' => 'DELETE']);
+        $form->handleRequest($request);
+        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+            $form->submit($request->request->get($form->getName()));
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($note->getTags() as $tag) {
+                $note->removeTag($tag);
             }
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->delete($note);
-                $this->addFlash('success', 'message.deleted_successfully');
-
-                return $this->redirectToRoute('note_index');
-            }
-
-            return $this->render(
-                'note/delete.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'note' => $note,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
+            $repository->delete($note);
+            $this->addFlash('success', 'message.deleted_successfully');
             return $this->redirectToRoute('note_index');
         }
+        return $this->render(
+            'note/delete.html.twig',
+            [
+                'form' => $form->createView(),
+                'note' => $note,
+            ]
+        );
     }
 
     /**
@@ -239,8 +232,7 @@ class NoteController extends AbstractController
                 'note/index.html.twig',
                 ['pagination' => $pagination]
             );
-        }
-        else {
+        } else {
             return $this->redirectToRoute('note_index');
         }
     }

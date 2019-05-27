@@ -185,6 +185,9 @@ class TaskController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($task->getTags() as $tag) {
+                $task->removeTag($tag);
+            }
             $repository->delete($task);
             $this->addFlash('success', 'message.deleted_successfully');
 

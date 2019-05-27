@@ -109,6 +109,9 @@ class Bookmark
      */
     private $author;
 
+    /**
+     * Bookmark constructor.
+     */
     public function __construct()
     {
         $this->tags = new ArrayCollection();

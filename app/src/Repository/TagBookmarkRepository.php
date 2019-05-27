@@ -6,6 +6,7 @@ use App\Entity\TagBookmark;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Entity\User;
 
 /**
  * @method TagBookmark|null find($id, $lockMode = null, $lockVersion = null)

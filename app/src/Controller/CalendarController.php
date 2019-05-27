@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * Class CalendarController.
@@ -62,19 +63,18 @@ class CalendarController extends AbstractController
      *     name="calendar_view",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="calendar",
+     * )
      */
     public function view(Calendar $calendar): Response
     {
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') or $calendar->getAuthor() == $this->getUser()) {
-            return $this->render(
-                'calendar/view.html.twig',
-                ['calendar' => $calendar]
-            );
-        }
-
-        $this->addFlash('warning', 'message.item_not_found');
-
-        return $this->redirectToRoute('calendar_index');
+        return $this->render(
+            'calendar/view.html.twig',
+            ['calendar' => $calendar]
+        );
     }
 
     /**
@@ -133,33 +133,28 @@ class CalendarController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="calendar_edit",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="calendar",
+     * )
      */
     public function edit(Request $request, Calendar $calendar, CalendarRepository $repository): Response
     {
-        if ($calendar->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(CalendarType::class, $calendar, ['method' => 'PUT']);
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->save($calendar);
-
-                $this->addFlash('success', 'message.updated_successfully');
-
-                return $this->redirectToRoute('calendar_index');
-            }
-
-            return $this->render(
-                'calendar/edit.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'calendar' => $calendar,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
+        $form = $this->createForm(CalendarType::class, $calendar, ['method' => 'PUT']);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $repository->save($calendar);
+            $this->addFlash('success', 'message.updated_successfully');
             return $this->redirectToRoute('calendar_index');
         }
+        return $this->render(
+            'calendar/edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'calendar' => $calendar,
+            ]
+        );
     }
 
     /**
@@ -180,36 +175,34 @@ class CalendarController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="calendar_delete",
      * )
+     *
+     * @IsGranted(
+     *     "MANAGE",
+     *     subject="calendar",
+     * )
      */
     public function delete(Request $request, Calendar $calendar, CalendarRepository $repository): Response
     {
-        if ($calendar->getAuthor() == $this->getUser() or $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(FormType::class, $calendar, ['method' => 'DELETE']);
-            $form->handleRequest($request);
-
-            if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
-                $form->submit($request->request->get($form->getName()));
+        $form = $this->createForm(FormType::class, $calendar, ['method' => 'DELETE']);
+        $form->handleRequest($request);
+        if ($request->isMethod('DELETE') && !$form->isSubmitted()) {
+            $form->submit($request->request->get($form->getName()));
+        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($calendar->getTags() as $tag) {
+                $calendar->removeTag($tag);
             }
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $repository->delete($calendar);
-                $this->addFlash('success', 'message.deleted_successfully');
-
-                return $this->redirectToRoute('calendar_index');
-            }
-
-            return $this->render(
-                'calendar/delete.html.twig',
-                [
-                    'form' => $form->createView(),
-                    'calendar' => $calendar,
-                ]
-            );
-        } else {
-            $this->addFlash('warning', 'message.item_not_found');
-
+            $repository->delete($calendar);
+            $this->addFlash('success', 'message.deleted_successfully');
             return $this->redirectToRoute('calendar_index');
         }
+        return $this->render(
+            'calendar/delete.html.twig',
+            [
+                'form' => $form->createView(),
+                'calendar' => $calendar,
+            ]
+        );
     }
 
     /**

@@ -17,7 +17,7 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label.title'|trans, 't.date') }}</th>
                 <th>{{ 'label.description'|trans }}</th>
                 {% if is_granted('ROLE_ADMIN') and currentPath != '/note/'%}
-                    <th>{{ knp_pagination_sortable(pagination, 'label.author'|trans, 't.author') }}</th>
+                    <th>{{ 'label.author'|trans }}</th>
                 {% endif %}
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
@@ -48,12 +48,6 @@
             </tbody>
         </table>
 
-        <div class="card">
-        <a class="btn" href="{{ url('note_new') }}" title="{{ 'action.new'|trans }}">
-            {{ 'action.new'|trans }}
-        </a>
-        </div>
-
         <div class="navigation text-center">
             {{ knp_pagination_render(pagination) }}
         </div>
@@ -62,18 +56,26 @@
         <p>
             {{ 'message.empty_list'|trans }}
         </p>
+    {% endif %}
+
+    {% if currentPath != '/note/admin' %}
         <div class="card">
             <a class="btn" href="{{ url('note_new') }}" title="{{ 'action.new'|trans }}">
                 {{ 'action.new'|trans }}
             </a>
         </div>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') and currentPath != '/note/admin' %}
-        <div class="card">
+
+    <div class="card">
+        {% if is_granted('ROLE_ADMIN') and currentPath == '/note/admin' %}
+            <a class="btn" href="{{ url('note_index') }}" title="{{ 'action.user_view'|trans }}">
+                {{ 'action.user_view'|trans }}
+            </a>
+        {% elseif is_granted('ROLE_ADMIN') %}
             <a class="btn" href="{{ url('note_index_admin') }}" title="{{ 'action.admin_view'|trans }}">
                 {{ 'action.admin_view'|trans }}
             </a>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 
 {% endblock %}

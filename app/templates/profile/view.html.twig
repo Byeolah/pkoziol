@@ -28,10 +28,23 @@
                     </a>
                 </button>
             </dd>
-            {% if user.id != app.user.id %}
+            <dt>{{ 'label.name'|trans }}</dt>
+            <dd>{{  user.firstName }}
+                <button>
+                    <a href="{{ url('firstname_edit', {id: user.id}) }}" title="{{ 'action.edit_name'|trans }}">
+                        {{ 'action.edit_name'|trans }}
+                    </a>
+                </button>
+            </dd>
+            {% if is_granted('ROLE_ADMIN') and user.id != app.user.id %}
             <dt>{{ 'label.change_role'|trans }}</dt>
             <dd>
-
+                {% for role in user.roles %}
+                    {{ role|trans }}
+                    {%- if not loop.last -%}
+                        ,
+                    {% endif %}
+               {% endfor %}
                 <br>
                 <button>
                     <a href="{{ url('role_edit', {id: user.id}) }}" title="{{ 'action.edit_role'|trans }}">
@@ -48,8 +61,8 @@
         </p>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a class="btn" href="{{ url('admin_user_index') }}" title="{{ 'action.back_to_list'|trans }}">
-            {{ 'action.back_to_list'|trans }}
+        <a class="btn" href="{{ url('admin_user_index') }}" title="{{ 'action.users_list'|trans }}">
+            {{ 'action.users_list'|trans }}
         </a>
     {% endif %}
 

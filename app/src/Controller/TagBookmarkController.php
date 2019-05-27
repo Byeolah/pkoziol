@@ -36,6 +36,8 @@ class TagBookmarkController extends AbstractController
      */
     public function index(Request $request, TagBookmarkRepository $repository, PaginatorInterface $paginator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
+        
         $pagination = $paginator->paginate(
             $repository->queryAll(),
             $request->query->getInt('page', 1),
@@ -60,6 +62,7 @@ class TagBookmarkController extends AbstractController
      *     name="tagbookmark_view",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
      */
     public function view(TagBookmark $tagbookmark): Response
     {
